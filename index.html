@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111a2d"><title>Mathbound: Siege of the Realms — Five-World Campaign v0.7</title>
+<style>
+:root{--bg:#151426;--panel:#2a233c;--edge:#d6a165;--gold:#ffda87;--white:#fff2da;--teal:#9beec6;--muted:#d7cfb7}*{box-sizing:border-box}html,body{height:100%;margin:0;background:#090f1c;color:var(--white);font:16px/1.35 Georgia,'Trebuchet MS',Verdana,sans-serif;overscroll-behavior:none}body{display:grid;place-items:center;overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.38;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8ceff7;outline-offset:3px}
+#frame{width:min(100vw,calc(100dvh * 1280 / 720));aspect-ratio:16/9;position:relative;overflow:hidden;background:#101c2d;box-shadow:0 0 0 3px #bc844e,0 14px 60px #000b;isolation:isolate}#battle{display:block;width:100%;height:100%;image-rendering:pixelated;touch-action:none}#layer{position:absolute;inset:0;overflow-y:auto;background:linear-gradient(108deg,rgba(15,14,31,.84),rgba(18,11,31,.63));display:grid;place-items:center;padding:1.4%}#layer.hide{display:none}
+.screen{width:min(1040px,99%);max-height:100%;overflow-y:auto;border:4px ridge #e7b66d;border-radius:17px;background:linear-gradient(138deg,rgba(46,31,55,.985),rgba(24,25,52,.986));box-shadow:inset 0 0 0 3px #6b4765,0 10px 0 #180f26,0 23px 72px #000c;padding:clamp(12px,2vw,26px)}.screen.narrow{max-width:640px}.herohead{display:flex;gap:17px;align-items:center;justify-content:space-between;border-bottom:2px solid #8d6378;padding-bottom:10px;margin-bottom:13px}.eyebrow{font-size:11px;letter-spacing:.22em;font-weight:900;color:var(--teal);text-transform:uppercase}.brand{font-size:clamp(22px,2.7vw,42px);line-height:1.03;margin:5px 0;color:var(--gold);font-weight:1000;letter-spacing:-.035em;text-shadow:3px 3px #632e33,0 0 18px #f59e4e77}.sub{font-size:clamp(12px,1.08vw,15px);color:#d1dbdf;margin:0}.stamp{min-width:89px;text-align:center;border:2px solid #9c7753;border-radius:9px;background:#292e3e;padding:8px;color:#ffdfa9;font-weight:900;letter-spacing:.05em;font-size:12px;box-shadow:inset 0 0 0 2px #423c3b}
+.menuGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.box{border:2px solid #82627e;border-radius:9px;background:linear-gradient(152deg,#271e3ae8,#1b3044e8);padding:13px}.box h3{margin:0 0 9px;color:#ffd69f;font-size:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.small{font-size:12px;color:#beced9}.selectors{display:flex;gap:9px;flex-wrap:wrap;margin:9px 0}.selectors label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;display:flex;gap:5px;align-items:center;color:#c2d3d9}.selectors select{background:#eff4eb;color:#152738;border:2px solid #b5a27a;border-radius:6px;padding:6px 4px;max-width:155px;font-weight:800;font-size:13px}.action{background:linear-gradient(#faaf59,#a95738);border:2px solid #f2c27b;color:#fff5da;text-shadow:0 2px #5b2c36;font-weight:900;padding:9px 14px;border-radius:7px;box-shadow:0 3px #643f3b}.action:hover:not(:disabled){filter:brightness(1.12);transform:translateY(-1px)}.action.alt{background:linear-gradient(#655284,#423b6a);border-color:#7394a1;box-shadow:0 3px #1d3443}.action.green{background:linear-gradient(#478f70,#236753);border-color:#92dccc;box-shadow:0 3px #183f42}.action.smallBtn{font-size:12px;padding:6px 9px}.levelGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}.lvl{background:linear-gradient(#4b3b5c,#2d2642);border:2px solid #597283;border-radius:6px;padding:7px 0;color:#fff5df;font-size:13px;font-weight:900;min-width:0}.lvl.active{background:linear-gradient(#f2c377,#a96541);border-color:#ffe4ab}.lvl.won{border-color:#52c9a9;background:#264c4f}.lvl.lock{filter:grayscale(1);opacity:.36}.miniWorld{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.worldTile{border:1px solid #87697b;border-radius:6px;padding:8px 3px;text-align:center;font-size:11px;color:#c6b5c8;background:#312942}.worldTile strong{display:block;color:#f5d6a6;font-size:12px}.shopItems{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.shopItem{border:1px solid #907e8b;background:linear-gradient(130deg,#413349,#2f3046);border-radius:6px;padding:8px;display:flex;align-items:center;gap:8px}.shopItem img{width:64px;height:64px;object-fit:contain;image-rendering:auto;flex-shrink:0;filter:drop-shadow(0 4px 4px #100d24)}.shopItem strong{font-size:13px;display:block}.shopItem .small{font-size:11px}.shopItem .action{margin-top:4px}.screen p{margin:9px 0}.footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-top:1px solid #486073;padding-top:10px;margin-top:10px;font-size:12px;color:#b6cbd0}.stars{color:#ffd278;letter-spacing:.075em}.mathProblem{background:linear-gradient(115deg,#3b315c,#654160);border:2px solid #5e8b86;border-radius:9px;padding:14px;text-align:center;color:#fff4cf;margin:13px 0}.mathProblem .big{font-weight:1000;font-size:clamp(26px,3.4vw,48px);letter-spacing:.01em;overflow-wrap:anywhere}.answers{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.answer{background:#fff2ce;color:#163048;border:2px solid #a0bea8;border-radius:7px;font-weight:900;min-height:47px;font-size:clamp(17px,1.7vw,23px)}.answer:hover{background:#cae9dd}.answer.wrong{background:#e8bab3;border-color:#ca615a}.answer.right{background:#c2f4cb;border-color:#2dba7e}.entry{display:flex;gap:8px;margin:12px 0}.entry input{min-width:0;flex:1;border:3px solid #82b8b5;border-radius:6px;padding:9px 12px;font-size:22px;background:#fff;color:#14293b}.message{font-size:13px;border:1px solid #547285;background:#322d49;padding:10px;border-radius:7px;margin:10px 0;line-height:1.45}.message.good{border-color:#55c8a9;background:#1e5549}.message.bad{border-color:#dc9676;background:#533e3b}.tips{font-size:13px;color:#c9d6d7}.results{font-size:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px auto}.results div{background:#443550;border:1px solid #4e6c78;border-radius:6px;padding:8px}.results strong{color:#ffe1ac}.mobileHelp{display:none}.heroBadge{display:inline-flex;background:#17483e;border:1px solid #5bc4a0;border-radius:5px;color:#bcffe6;padding:3px 7px;margin-left:6px;font-size:11px;letter-spacing:.02em;vertical-align:middle}
+@media(max-width:710px){.screen{padding:9px}.herohead{margin-bottom:7px;padding-bottom:6px}.menuGrid{grid-template-columns:1fr}.box{padding:8px}.brand{font-size:22px}.screen{max-height:100%}.menuGrid{gap:7px}.screen .sub{font-size:11px}.stamp{display:none}.selectors{margin:5px 0}.shopItems{grid-template-columns:repeat(2,1fr)}.shopItem img{width:33px;height:33px}.shopItem .action{font-size:10px}.footer{padding:5px}.levelGrid{gap:4px}.lvl{padding:5px 0}}
+@media(max-height:470px){.screen{padding:9px}.herohead{padding-bottom:5px;margin-bottom:6px}.brand{font-size:24px}.box{padding:8px}.shopItem img{width:37px;height:37px}.footer{margin-top:6px}.mathProblem{padding:7px;margin:5px 0}.mathProblem .big{font-size:27px}.answer{min-height:33px}.tips{font-size:11px}}
+@media(orientation:portrait) and (max-width:700px){body{display:block;padding-top:calc(env(safe-area-inset-top) + 12px)}#frame{width:100vw;aspect-ratio:16/9}#layer{padding:1%}.mobileHelp{display:block;text-align:center;padding:16px;background:#102638;color:#f8d7a4}.mobileHelp strong{display:block}} 
+
+/* World 2 frost-bound menus retain the campaign's original layout. */
+body[data-realm="frost"] .screen{border-color:#9ceafa;background:linear-gradient(140deg,rgba(21,48,72,.985),rgba(16,30,61,.985));box-shadow:inset 0 0 0 3px #316880,0 15px 65px #000c}
+body[data-realm="frost"] .brand{color:#d2f8ff;text-shadow:3px 3px #245e7f,0 0 16px #87deff88}
+body[data-realm="frost"] .box{border-color:#6aaec6;background:linear-gradient(135deg,#163b57ef,#20294ded)}
+body[data-realm="frost"] .box h3{color:#b8f4ff}
+body[data-realm="frost"] .stamp{border-color:#8fe0ed;background:#133d54;color:#d7fcff}
+body[data-realm="frost"] .world-pick{margin-top:0}
+body[data-realm="frost"] .mathProblem{background:linear-gradient(115deg,#174369,#385276);border-color:#a9ebf4}
+body[data-realm="frost"] .lvl.active{background:linear-gradient(#8dd5f1,#376b9a);border-color:#d9f8ff}
+
+/* World 3: copper, electrical cyan and amethyst gearwork; same responsive layout. */
+body[data-realm="clock"] .screen{border-color:#f7cc80;background:linear-gradient(140deg,rgba(46,31,76,.984),rgba(18,32,58,.987));box-shadow:inset 0 0 0 3px #8f5b9f,0 15px 65px #000d}
+body[data-realm="clock"] .brand{color:#ffe6a3;text-shadow:3px 3px #623765,0 0 16px #d595ff77}
+body[data-realm="clock"] .box{border-color:#ac85c9;background:linear-gradient(138deg,#34264bea,#182e50f2)}
+body[data-realm="clock"] .box h3{color:#ffe2a8}
+body[data-realm="clock"] .stamp{border-color:#ffd080;background:#392851;color:#fceabf}
+body[data-realm="clock"] .mathProblem{background:linear-gradient(115deg,#43306e,#385a85);border-color:#e4b7f7}
+body[data-realm="clock"] .lvl.active{background:linear-gradient(#f3d68b,#ad668f);border-color:#ffe9ba}
+
+/* World 4: Crystal Depths / division — luminous turquoise and amethyst. */
+body[data-realm="crystal"] .screen{border-color:#99eff3;background:linear-gradient(140deg,rgba(28,29,66,.985),rgba(16,52,69,.986));box-shadow:inset 0 0 0 3px #6d62b3,0 15px 65px #000d}
+body[data-realm="crystal"] .brand{color:#e3efff;text-shadow:3px 3px #513a88,0 0 18px #6ceffa99}
+body[data-realm="crystal"] .box{border-color:#73c9dc;background:linear-gradient(135deg,#2a2d5bed,#123b4ff2)}
+body[data-realm="crystal"] .box h3{color:#c6f9ff}
+body[data-realm="crystal"] .stamp{border-color:#91f0e5;background:#20315c;color:#e7faff}
+body[data-realm="crystal"] .mathProblem{background:linear-gradient(115deg,#2e336a,#225a75);border-color:#96f9ed}
+body[data-realm="crystal"] .lvl.active{background:linear-gradient(#b4e9ff,#6269b5);border-color:#d4fcff}
+/* World 5: four realms collide, with prismatic plum and cyan. */
+body[data-realm="nexus"] .screen{border-color:#dfa6ff;background:linear-gradient(135deg,rgba(43,23,76,.987),rgba(17,37,66,.987));box-shadow:inset 0 0 0 3px #8f52d7,0 15px 65px #000d}
+body[data-realm="nexus"] .brand{color:#ffdbad;text-shadow:3px 3px #613b91,0 0 19px #d37affaa}
+body[data-realm="nexus"] .box{border-color:#aa8ded;background:linear-gradient(130deg,#332451f3,#152e50f1)}
+body[data-realm="nexus"] .box h3{color:#e7d2ff}
+body[data-realm="nexus"] .stamp{border-color:#db9aff;background:#33204d;color:#fae5ff}
+body[data-realm="nexus"] .mathProblem{background:linear-gradient(117deg,#502669,#254876);border-color:#d2a6ff}
+body[data-realm="nexus"] .lvl.active{background:linear-gradient(#edb5ff,#7851b8);border-color:#ffdcff}
+@media(max-width:710px){.miniWorld{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.world-pick .action{flex:1 1 145px;white-space:normal;min-height:35px;line-height:1.15}
+</style></head>
+<body><div id="frame"><canvas id="battle" width="1280" height="720" aria-label="Mathbound tactical defense battlefield across five worlds: addition, subtraction, multiplication, division, and mixed operations. Select a guardian card and click an open tile to deploy."></canvas><div id="layer"><div class="screen narrow"><div class="eyebrow">Powering the Heartstone</div><h1 class="brand">Mathbound</h1><p>Loading the realms…</p></div></div></div><div class="mobileHelp"><strong>Landscape view recommended</strong>Turn your device sideways for larger defenders and easier controls.</div>
+<script>
+(()=>{'use strict';
+const W=1280,H=720,COLS=9,LANES=[233,309,385,461,537],X0=282,CELL=96,LEFT=178;
+const canvas=document.getElementById('battle'),ctx=canvas.getContext('2d'),layer=document.getElementById('layer');
+const names=['nexus_battlefield','nexus_menu','nexusoverlord','crystal_battlefield','crystal_menu','shardling','gemrunner','geodeguard','prismwisp','amethystcolossus','clockwork_battlefield','clockwork_menu','gearling','coilrunner','ironbulwark','staticwisp','chronotitan','ranger','bulwark','sprite','lobber','cinderling','skitter','brute','ashwisp','titan','orb','blast','emberwood_battlefield','emberwood_menu','frostbite_battlefield','frostbite_menu','frostling','snowstalker','glacierbrute','icewisp','frosttitan'];const imgs={};
+let imagesReady=0;names.forEach(n=>{let img=new Image();img.src='assets/'+n+'.png';img.onload=()=>{imagesReady++;if(imagesReady===names.length)renderMenu()};img.onerror=()=>{imagesReady++;console.warn('Missing asset '+n);if(imagesReady===names.length)renderMenu()};imgs[n]=img});
+const DEF=[
+{id:'ranger',name:'Ember Gryphon',cost:50,hp:115,dmg:28,rate:1.35,range:930,desc:'Windlance: a gryphon unleashes luminous air slashes that travel across its lane.'},
+{id:'bulwark',name:'Stone Guardian',cost:75,hp:570,dmg:22,rate:2.8,range:136,desc:'Earthguard: absorbs heavy damage and punches nearby foes with boulders.'},
+{id:'sprite',name:'Leaf Warden',cost:95,hp:120,dmg:11,rate:11,range:730,income:30,desc:'Wildgrowth: gathers Spark and occasionally snares an enemy with vines.'},
+{id:'lobber',name:'Flame Mage',cost:150,hp:135,dmg:72,rate:3.5,range:870,splash:92,desc:'Fireburst: hurls molten fireballs that damage clusters of monsters.'}
+];
+const EN={cinderling:{hp:86,speed:19,attack:20,rate:1.5,reward:10,scale:1},skitter:{hp:65,speed:35,attack:13,rate:1.15,reward:12,scale:.88},brute:{hp:350,speed:11,attack:30,rate:1.8,reward:35,scale:1.2},ashwisp:{hp:120,speed:29,attack:19,rate:1.35,reward:17,scale:1},titan:{hp:1650,speed:8.8,attack:60,rate:1.65,reward:180,scale:2.2}};
+Object.assign(EN,{frostling:{hp:95,speed:21,attack:19,rate:1.5,reward:11,scale:1},snowstalker:{hp:68,speed:41,attack:13,rate:1.18,reward:13,scale:.88},glacierbrute:{hp:405,speed:10,attack:32,rate:1.78,reward:38,scale:1.2},icewisp:{hp:112,speed:33,attack:19,rate:1.33,reward:18,scale:1},frosttitan:{hp:1700,speed:9,attack:62,rate:1.63,reward:200,scale:2.2}});
+Object.assign(EN,{gearling:{hp:99,speed:22,attack:21,rate:1.4,reward:12,scale:1},coilrunner:{hp:70,speed:41,attack:15,rate:1.1,reward:14,scale:.86},ironbulwark:{hp:450,speed:10.5,attack:35,rate:1.7,reward:42,scale:1.2},staticwisp:{hp:139,speed:32,attack:21,rate:1.31,reward:19,scale:1},chronotitan:{hp:1850,speed:9.3,attack:66,rate:1.65,reward:220,scale:2.25}});
+Object.assign(EN,{shardling:{hp:105,speed:23,attack:22,rate:1.43,reward:13,scale:1},gemrunner:{hp:78,speed:42,attack:16,rate:1.13,reward:15,scale:.88},geodeguard:{hp:485,speed:10.1,attack:37,rate:1.76,reward:45,scale:1.24},prismwisp:{hp:151,speed:33,attack:22,rate:1.3,reward:20,scale:1},amethystcolossus:{hp:1980,speed:8.9,attack:68,rate:1.65,reward:240,scale:2.3}});
+// The final realm brings adversaries from all four elemental realms together.
+Object.assign(EN,{nexusoverlord:{hp:2450,speed:8.7,attack:72,rate:1.62,reward:275,scale:2.38}});
+const BOSSES=['titan','frosttitan','chronotitan','amethystcolossus','nexusoverlord'];
+const HEAVIES=['brute','glacierbrute','ironbulwark','geodeguard'];
+const RUNNERS=['skitter','snowstalker','coilrunner','gemrunner'];
+const WISPS=['ashwisp','icewisp','staticwisp','prismwisp'];
+const SAVE='mathbound_emberwood_v01'; /* Preserve v0.3–v0.6 save storage; world 5 uses 5:1 ... 5:10 keys. */const defaults={grade:'5',answerMode:'auto',levels:{},shards:0,upgrades:[0,0,0,0],wins:0,sound:true,seen:[]};let saved={...defaults};
+try{const got=JSON.parse(localStorage.getItem(SAVE)||'{}');if(got&&typeof got==='object')saved={...saved,...got}}catch{};
+saved.levels=saved.levels||{};saved.upgrades=Array.isArray(saved.upgrades)&&saved.upgrades.length===4?saved.upgrades:[0,0,0,0];saved.seen=Array.isArray(saved.seen)?saved.seen:[];
+function persist(){try{localStorage.setItem(SAVE,JSON.stringify(saved))}catch{}}
+let activeWorld=([1,2,3,4,5].includes(saved.activeWorld)?saved.activeWorld:1);let selected=1;while(selected<10&&saved.levels[activeWorld===1?String(selected):activeWorld+':'+selected])selected++;let mode='menu',g=null,hover=null,lastTime=0,soundOn=!!saved.sound,audio=null;const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+function sound(freq=520,sec=.08,type='sine',volume=.055){if(!soundOn)return;try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),ga=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(60,freq*.65),audio.currentTime+sec);ga.gain.setValueAtTime(volume,audio.currentTime);ga.gain.exponentialRampToValueAtTime(.001,audio.currentTime+sec);o.connect(ga);ga.connect(audio.destination);o.start();o.stop(audio.currentTime+sec)}catch{}}
+const levelKey=(world,level)=>world===1?String(level):world+':'+level;
+const realmName=world=>world===1?'Emberwood Valley':world===2?'Frostbite Pass':world===3?'Clockwork Dominion':world===4?'Crystal Depths':'Chaos Nexus';
+const realmSubject=world=>world===1?'Addition':world===2?'Subtraction':world===3?'Multiplication':world===4?'Division':'Mixed Operations';
+const realmTheme=world=>world===1?'ember':world===2?'frost':world===3?'clock':world===4?'crystal':'nexus';
+const isUnlocked=n=>n===1||!!saved.levels[levelKey(activeWorld,n-1)];
+const starText=s=>'★'.repeat(s||0)+'☆'.repeat(3-(s||0));
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function show(html){layer.classList.remove('hide');layer.innerHTML=html}
+function hide(){layer.classList.add('hide');layer.innerHTML=''}
+function bossInfo(l){if(activeWorld===5)return l===10?'FINAL BOSS · THE NEXUS OVERLORD':l>=8?'All four realms collide in the final onslaught':l>=5?'Layered operations and mixed-realm enemies':'Review all four operations in rapidly changing battles';if(activeWorld===4)return l===10?'FINAL BOSS · THE AMETHYST COLOSSUS':l>=7?'Prism wisps and heavy geode guardians':l>=4?'Gemrunners swarm five crystal bridges':'Division battles and crystal rewards in the deep cavern';if(activeWorld===3)return l===10?'FINAL BOSS · THE CLOCKWORK TITAN':l>=7?'Arc raiders across all five tracks':l>=4?'Coilrunners and armored constructs':'Multiplication battles in the Clockwork Dominion';if(activeWorld===2)return l===10?'FINAL BOSS · THE GLACIER COLOSSUS':l>=7?'Blizzard raiders in five lanes':l>=4?'Sliding frost monsters approach':'Subtraction battles in Frostbite Pass';return l===10?'FINAL BOSS · THE ASHEN TITAN':l>=7?'Elite monsters and five active lanes':l>=4?'New enemies and more tactical choices': 'Practice placing guardians and charging your defenses'}
+function chapter(l){if(activeWorld===5)return (['','At the Fracture','Four Echoes','The Unstable Gates','Across the Rift','Convergence Point','Shattered Equations','The Changing Paths','Storm of Operations','Edge of the Void','Heart of Chaos'][l]||'Chaos Nexus');if(activeWorld===4)return (['','First Facets','The Divided Road','Shardling Mine','The Gemstone Bridge','Five Crystal Paths','Prismfall','The Geode Guardians','Cavern of Echoes','Under the Great Spire','Heart of Amethyst'][l]||'Crystal Depths');if(activeWorld===3)return (['','The First Gear','Copper Causeway','Spark Factory','The Twisting Rails','Five Clockwork Tracks','Voltage Rush','Brass Sentinel','The Electric Spires','The Great Gearworks','Heart of the Clock'][l]||'Clockwork Dominion');if(activeWorld===2)return (['','First Frost','Snowbound Trail','Frostling Scouts','The Frozen Bridge','Five Winter Paths','Blizzard Ambush','Icefall Advance','The Crystal Pass','Colossus Approaches','The Glacier Citadel'][l]||'Frostbite Pass');return l===10?'Heart of the Inferno':(['','First Sparks','The Broken Road','Cinder Scouts','Firelight Crossing','The Five Paths','Ashen Ambush','The Ember Patrol','Falling Cinders','The Rift Approaches'][l])}
+function renderMenu(){mode='menu';g=null;document.body.dataset.realm=realmTheme(activeWorld);const allStars=Object.entries(saved.levels).filter(([key])=>activeWorld===1?!key.includes(':'):key.startsWith(activeWorld+':')).reduce((a,[,b])=>a+(b.stars||0),0);let levels='';for(let n=1;n<=10;n++)levels+=`<button class="lvl ${selected===n?'active':''} ${saved.levels[levelKey(activeWorld,n)]?'won':''} ${!isUnlocked(n)?'lock':''}" data-level="${n}" ${isUnlocked(n)?'':'disabled'} title="${esc(chapter(n))}">${n}${saved.levels[levelKey(activeWorld,n)]?' ★':''}</button>`;
+const shop=DEF.map((d,i)=>{let up=saved.upgrades[i],cost=2+up*3;return `<div class="shopItem"><img src="assets/${d.id}.png" alt=""><div><strong>${esc(d.name)}</strong><span class="small">Rank ${up+1} · ${up===3?'MAX':'Upgrade '+cost+' shards'}</span><div><button class="action smallBtn alt" data-upgrade="${i}" ${up===3||saved.shards<cost?'disabled':''}>${up===3?'Maxed':'Improve'}</button></div></div></div>`}).join('');
+show(`<div class="screen"><div class="herohead"><div><div class="eyebrow">The Heartstone Chronicles · Five-World Campaign v0.7</div><h1 class="brand">MATHBOUND <span style="font-size:45%;color:#9cf2d7;letter-spacing:.02em">SIEGE OF THE REALMS</span></h1><p class="sub">Summon elemental guardians. Solve mathematics. Stop the monsters reaching the Heartstone.</p></div><div class="stamp">${activeWorld===1?'EMBERWOOD':activeWorld===2?'FROSTBITE':activeWorld===3?'CLOCKWORK':activeWorld===4?'CRYSTAL DEPTHS':'CHAOS NEXUS'}<br>WORLD 0${activeWorld}<br><span style="color:#7ce7cd">${realmSubject(activeWorld).toUpperCase()}</span></div></div><div class="menuGrid"><div class="box"><div class="selectors world-pick"><button class="action smallBtn ${activeWorld===1?'green':'alt'}" id="worldOne">01 · Emberwood / Addition</button><button class="action smallBtn ${activeWorld===2?'green':'alt'}" id="worldTwo">02 · Frostbite / Subtraction</button><button class="action smallBtn ${activeWorld===3?'green':'alt'}" id="worldThree">03 · Clockwork / ×</button><button class="action smallBtn ${activeWorld===4?'green':'alt'}" id="worldFour">04 · Crystal Depths / ÷</button><button class="action smallBtn ${activeWorld===5?'green':'alt'}" id="worldFive">05 · Chaos Nexus / ±×÷</button></div><h3>World ${activeWorld} · ${realmName(activeWorld)}</h3><p class="small" style="margin:2px 0 6px">${activeWorld===1?'Ten tactical addition battles and the Ashen Titan finale.':activeWorld===2?'Ten icy subtraction battles and the Glacier Colossus finale.':activeWorld===3?'Ten multiplication battles, clockwork constructs and the Clockwork Titan finale. Consecutive correct answers overclock the Heartstone.':activeWorld===4?'Ten crystal-cavern division battles, geode guardians, and the Amethyst Colossus. Every three first-try correct answers restore 5% Heartstone.':'Ten final-realm battles combining all four operations. Master four distinct first-try challenges to trigger Nexus Harmony and defend against the Nexus Overlord.'}</p><div class="selectors"><label>Math level <select id="grade"><option value="foundations" ${saved.grade==='foundations'?'selected':''}>Foundations</option>${[5,6,7,8].map(n=>`<option value="${n}" ${saved.grade===String(n)?'selected':''}>Grade ${n}</option>`).join('')}</select></label><label>Answers <select id="answerMode"><option value="auto" ${saved.answerMode==='auto'?'selected':''}>Adaptive</option><option value="choice" ${saved.answerMode==='choice'?'selected':''}>Multiple choice</option><option value="type" ${saved.answerMode==='type'?'selected':''}>Type answers</option></select></label></div><div class="levelGrid">${levels}</div><div class="row"><div><strong style="font-size:15px;color:#ffe0a9">${selected}. ${chapter(selected)}</strong><div class="small">${bossInfo(selected)}</div><div class="small stars">${saved.levels[levelKey(activeWorld,selected)]?starText(saved.levels[levelKey(activeWorld,selected)].stars):'Not completed'}</div></div><button class="action green" id="play">Enter Battle</button></div><div style="height:9px"></div><h3 style="margin-top:4px">Realm atlas</h3><div class="miniWorld"><div class="worldTile"><strong>01 Emberwood</strong>Addition · PLAYABLE</div><div class="worldTile"><strong>02 Frostbite</strong>Subtraction · PLAYABLE</div><div class="worldTile"><strong>03 Clockwork</strong>Multiplication · PLAYABLE</div><div class="worldTile"><strong>04 Crystal Depths</strong>Division · PLAYABLE</div><div class="worldTile"><strong>05 Chaos Nexus</strong>Mixed operations · PLAYABLE</div></div></div><div class="box"><div class="row"><h3>Heartstone Workshop</h3><div style="font-size:13px;color:#f5d3a0">Shards: <strong>${saved.shards}</strong></div></div><p class="small">Win battles to earn Heartstone Shards. Guardian upgrades permanently improve health and abilities.</p><div class="shopItems">${shop}</div><div class="message" style="margin-bottom:0"><strong>How to play</strong><br>Pick a guardian card (1–4), then click an open stone tile. Defend every active lane. Every wave begins with a ${realmSubject(activeWorld).toLowerCase()} challenge. V0.7: Windlance, Boulders, Vine Snare and Fireburst. Press <strong>M</strong> for extra practice and Spark. Press <strong>Space</strong> to cast a Crystal Burst when charged. <strong>P</strong> pauses. Defenders glow when attacking; enemies show damage and slow effects.</div></div></div><div class="footer"><span>World ${activeWorld} stars: <span class="stars">${allStars}/30</span> · Victories: ${saved.wins}</span><span><button class="action alt smallBtn" id="audio">Sound: ${soundOn?'ON':'OFF'}</button> &nbsp; <button class="action alt smallBtn" id="guide">Guardian Guide</button></span></div></div>`);
+layer.querySelector('#worldOne').onclick=()=>{activeWorld=1;saved.activeWorld=1;selected=1;while(selected<10&&saved.levels[levelKey(1,selected)])selected++;persist();renderMenu()};layer.querySelector('#worldTwo').onclick=()=>{activeWorld=2;saved.activeWorld=2;selected=1;while(selected<10&&saved.levels[levelKey(2,selected)])selected++;persist();renderMenu()};layer.querySelector('#worldThree').onclick=()=>{activeWorld=3;saved.activeWorld=3;selected=1;while(selected<10&&saved.levels[levelKey(3,selected)])selected++;persist();renderMenu()};layer.querySelector('#worldFour').onclick=()=>{activeWorld=4;saved.activeWorld=4;selected=1;while(selected<10&&saved.levels[levelKey(4,selected)])selected++;persist();renderMenu()};layer.querySelector('#worldFive').onclick=()=>{activeWorld=5;saved.activeWorld=5;selected=1;while(selected<10&&saved.levels[levelKey(5,selected)])selected++;persist();renderMenu()};
+layer.querySelector('#grade').onchange=e=>{saved.grade=e.target.value;persist()};layer.querySelector('#answerMode').onchange=e=>{saved.answerMode=e.target.value;persist()};layer.querySelectorAll('[data-level]').forEach(e=>e.onclick=()=>{selected=+e.dataset.level;renderMenu()});layer.querySelectorAll('[data-upgrade]').forEach(e=>e.onclick=()=>{let i=+e.dataset.upgrade,n=saved.upgrades[i],cost=2+n*3;if(n<3&&saved.shards>=cost){saved.shards-=cost;saved.upgrades[i]++;persist();sound(820);renderMenu()}});layer.querySelector('#play').onclick=()=>start(selected);layer.querySelector('#audio').onclick=toggleSound;layer.querySelector('#guide').onclick=guide;
+}
+function toggleSound(){soundOn=!soundOn;saved.sound=soundOn;persist();if(mode==='menu')renderMenu();else if(mode==='pause')pauseScreen()}
+function guide(){show(`<div class="screen narrow"><div class="eyebrow">Field Manual</div><h1 class="brand">Your Four Guardians</h1>${DEF.map((d,i)=>`<div class="row" style="border-bottom:1px solid #466276;padding:7px"><img src="assets/${d.id}.png" style="width:59px;height:59px;image-rendering:auto" alt=""><div style="flex:1"><strong>${i+1}. ${d.name} — ${d.cost} Spark</strong><div class="small">${d.desc} Permanent rank: ${saved.upgrades[i]+1}.</div></div></div>`).join('')}<p class="tips">In battle, the Gryphon fires windbolts, the Golem throws close-range rocks, the Warden gathers Spark and snares foes, and the Mage casts explosive fireballs. Crystal Burst damages every enemy on the field. Leaf Wardens earn Spark; protect them with Stone Guardians and attack from behind. Challenges never require perfect speed — battle pauses while solving. Earn stars and shards to improve your defenders.</p><div class="row"><button class="action green" id="back">Back to campaign</button></div></div>`);layer.querySelector('#back').onclick=renderMenu}
+function spec(type){let d=DEF[type],rank=saved.upgrades[type];return {...d,hp:Math.round(d.hp*(1+rank*.16)),dmg:Math.round(d.dmg*(1+rank*.20)),income:Math.round((d.income||0)*(1+rank*.18)),rate:d.rate*(type===0||type===3?1-rank*.045:1)}}
+function buildSchedule(l){let waves=l===10?7:Math.min(6,2+Math.ceil(l/2));let schedule=[];for(let w=0;w<waves;w++){let count=Math.min(11,3+Math.floor(l*.48)+w);if(l===1)count=2+w;for(let i=0;i<count;i++){
+  let at=8+w*(l===10?27:24)+i*(2.2+Math.max(0,3-l)*.18);
+  let kind='cinderling';if(l>=3&&Math.random()<.24)kind='skitter';if(l>=5&&Math.random()<.17)kind='ashwisp';if(l>=6&&Math.random()<.15)kind='brute';if(l>=9&&Math.random()<.12)kind='brute';
+  let active=l<3?[1,2,3]:l<5?[0,1,2,3]:[0,1,2,3,4];let lane=active[(w+i*2+Math.floor(i/2))%active.length];
+  schedule.push({at,kind,lane,wave:w+1});
+ }}if(l===10)schedule.push({at:8+(waves-1)*27+25,kind:'titan',lane:2,wave:waves});if(activeWorld===2){const frostKinds={cinderling:'frostling',skitter:'snowstalker',brute:'glacierbrute',ashwisp:'icewisp',titan:'frosttitan'};schedule.forEach(s=>s.kind=frostKinds[s.kind]||s.kind)}if(activeWorld===3){const gears={cinderling:'gearling',skitter:'coilrunner',brute:'ironbulwark',ashwisp:'staticwisp',titan:'chronotitan'};schedule.forEach(s=>s.kind=gears[s.kind]||s.kind)}if(activeWorld===4){const gems={cinderling:'shardling',skitter:'gemrunner',brute:'geodeguard',ashwisp:'prismwisp',titan:'amethystcolossus'};schedule.forEach(s=>s.kind=gems[s.kind]||s.kind)}
+ if(activeWorld===5){const echoes={cinderling:['cinderling','frostling','gearling','shardling'],skitter:RUNNERS,brute:HEAVIES,ashwisp:WISPS};schedule.forEach((s,i)=>{s.kind=s.kind==='titan'?'nexusoverlord':(echoes[s.kind]||echoes.cinderling)[(s.wave+i+Math.floor(i/3))%4]})}
+ return schedule.sort((a,b)=>a.at-b.at)}
+function start(l){
+ if(!isUnlocked(l))return;
+ selected=l;mode='play';hide();document.body.dataset.realm=realmTheme(activeWorld);
+ const schedule=buildSchedule(l),active=l<3?[1,2,3]:l<5?[0,1,2,3]:[0,1,2,3,4];
+ g={world:activeWorld,level:l,active,time:0,life:100,spark:l===1?225:245+l*9,energy:0,placed:[],enemies:[],shots:[],particles:[],floaters:[],schedule,spawned:0,wave:0,kills:0,correct:0,tries:0,streak:0,misses:0,sel:0,cool:[0,0,0,0],questionTimer:0,crystalTimer:0,passive:0,finished:false,question:null,recent:saved.seen.slice(-25),questionCount:0,msg:'',msgTime:0,lastX:0,helpTimer:12,waveFlash:0,portalPulse:0,combo:0,prismStreak:0,nexusMask:0,nexusCycles:0};
+ sound(420,.2,'triangle');
+}
+function launch(){if(mode!=='play')return; if(g.energy<100)return;g.energy=0;g.enemies.forEach(e=>{e.hp-=BOSSES.includes(e.kind)?390:220;spawnParticles(e.x,LANES[e.lane],14,'#9bfff0')});g.enemies=g.enemies.filter(e=>{if(e.hp<=0){g.kills++;g.spark+=EN[e.kind].reward;return false}return true});g.msg='CRYSTAL BURST!';g.msgTime=2.4;sound(1040,.4,'sawtooth',.07)}
+function place(row,col){
+ if(!g.active.includes(row)||col<0||col>=COLS)return;
+ const x=X0+col*CELL;
+ if(g.placed.some(u=>u.row===row&&u.col===col)){g.msg='Tile occupied — choose an empty spot.';g.msgTime=2;return}
+ const d=spec(g.sel);
+ if(g.spark<d.cost){g.msg='Not enough Spark. Solve a challenge!';g.msgTime=2;return}
+ if(g.cool[g.sel]>0){g.msg='This guardian is recharging.';g.msgTime=2;return}
+ g.spark-=d.cost;g.cool[g.sel]=g.sel===3?6:g.sel===2?5:g.sel===1?4:2;
+ g.placed.push({row,col,x,y:LANES[row],type:g.sel,hp:d.hp,maxHp:d.hp,timer:g.sel===2?4:Math.random()*.7,vineTimer:2+Math.random()*3,attackFlash:0,hitFlash:0,summonFlash:1,bob:Math.random()*6.3});
+ g.helpTimer=0;spawnParticles(x,LANES[row],13,'#86eada');
+ sound(600,.13,'triangle');
+}
+const choiceNeedsTyping=()=>saved.answerMode==='type'||(saved.answerMode==='auto'&& (saved.grade==='foundations'?g.level>=7:saved.grade==='5'?g.level>=5:g.level>=3));
+const frac=(n,d)=>{const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);let q=gcd(n,d);if(d<0){n=-n;d=-d}return d/q===1?String(n/q):`${n/q}/${d/q}`};
+function genProblem(){if(g.world===5)return genNexusProblem();if(g.world===4)return genDivisionProblem();if(g.world===3)return genMultiplicationProblem();if(g.world===2)return genSubtractionProblem();let lvl=g.level,grade=saved.grade,n,answer,desc='Add the values carefully. Check place value and signs.',fmt='number',data={};let type=rnd(1,100);
+if(grade==='foundations'){n=rnd(1,Math.min(20,6+lvl*2));let a=rnd(0,n),b=rnd(0,n);if(lvl>=6&&type>75){let c=rnd(1,6);answer=a+b+c;n=`${a} + ${b} + ${c}`;desc='Add all three numbers; grouping them in a different order gives the same sum.'}else{answer=a+b;n=`${a} + ${b}`} }
+else if(grade==='5'){let max=lvl<=3?99:lvl<=7?399:999;let a=rnd(18,max),b=rnd(15,max);if(lvl>=7&&type>72){let c=rnd(4,180);n=`${a} + ${b} + ${c}`;answer=a+b+c;desc='Combine the numbers by place value. You can group convenient pairs.'}else{n=`${a} + ${b}`;answer=a+b}}
+else if(grade==='6'){let a=rnd(120,1600),b=rnd(60,1600),den=lvl>=6?100:10;n=`${(a/den).toFixed(den===100?2:1)} + ${(b/den).toFixed(den===100?2:1)}`;answer=Math.round((a+b)/den*100)/100;desc='Line up the decimal points; add digits in the same place value columns.'}
+else if(grade==='7'){let m=30+lvl*13;let a=rnd(-m,m),b=rnd(-m,m);if(a===0)a=5;n=`${a} + (${b<0?b:'+'+b})`;answer=a+b;desc='Same signs: add magnitudes and keep the sign. Different signs: subtract magnitudes and keep the sign of the larger magnitude.'}
+else{if(type<=39){let d1=[2,3,4,5,6,8][rnd(0,5)],d2=[2,3,4,5,6,8][rnd(0,5)],a=rnd(-d1*2,d1*2),b=rnd(-d2*2,d2*2);if(!a)a=1;answer=frac(a*d2+b*d1,d1*d2);n=`${frac(a,d1)} + (${frac(b,d2)})`;fmt='fraction';data={num:a*d2+b*d1,den:d1*d2};desc='Find a common denominator, add numerators, and simplify. Enter a reduced fraction or its exact decimal equivalent.'}else{let den=100,a=rnd(-2400,3000),b=rnd(-2400,3000);n=`${(a/den).toFixed(2)} + (${b<0?(b/den).toFixed(2):'+'+(b/den).toFixed(2)})`;answer=Math.round((a+b)/den*100)/100;desc='Add signed decimals. Keep the negative sign when the negative magnitude is larger.'}}
+return {text:n,answer:String(answer),fmt,desc,data,grade}}
+function genSubtractionProblem(){
+ const lvl=g.level,grade=saved.grade,type=rnd(1,100);
+ let expr,answer,fmt='number',data={},desc='Subtract carefully by place value. Check the direction of the subtraction.';
+ if(grade==='foundations'){
+  const a=rnd(3,Math.min(50,10+lvl*4)),b=rnd(0,a);
+  if(lvl>=6&&type>68){const c=rnd(0,Math.min(7,a-b));expr=`${a} − ${b} − ${c}`;answer=a-b-c;desc='Work from left to right when subtracting three numbers.'}
+  else{expr=`${a} − ${b}`;answer=a-b}
+ }else if(grade==='5'){
+  let m=lvl<4?99:lvl<8?550:1600,a=rnd(40,m),b=rnd(9,m);
+  if(lvl<4&&b>a)[a,b]=[b,a];
+  if(lvl>=7&&type>75){const c=rnd(3,60);expr=`${a} − ${b} − ${c}`;answer=a-b-c;desc='Subtract left to right. You may cross below zero in an advanced challenge.'}
+  else{expr=`${a} − ${b}`;answer=a-b}
+ }else if(grade==='6'){
+  const den=lvl<5?10:100,a=rnd(170,1800),b=rnd(15,1800);
+  expr=`${(a/den).toFixed(den===10?1:2)} − ${(b/den).toFixed(den===10?1:2)}`;
+  answer=Math.round((a-b)/den*100)/100;desc='Align decimal places, then subtract. Zero may be needed as a placeholder.';
+ }else if(grade==='7'){
+  const m=35+lvl*16,a=rnd(-m,m),b=rnd(-m,m);
+  expr=`${a} − (${b<0?b:'+'+b})`;answer=a-b;
+  desc='Subtracting a signed number is the same as adding its opposite.';
+ }else{
+  if(type<=42){
+   const d1=[2,3,4,5,6,8][rnd(0,5)],d2=[2,3,4,5,6,8][rnd(0,5)];let a=rnd(-2*d1,2*d1),b=rnd(-2*d2,2*d2);
+   if(!a)a=1;data={num:a*d2-b*d1,den:d1*d2};answer=frac(data.num,data.den);
+   expr=`${frac(a,d1)} − (${frac(b,d2)})`;fmt='fraction';desc='Use a common denominator, subtract numerators, and reduce your fraction.';
+  }else{
+   const den=100,a=rnd(-2800,3500),b=rnd(-2200,3000);
+   expr=`${(a/den).toFixed(2)} − (${b<0?(b/den).toFixed(2):'+'+(b/den).toFixed(2)})`;
+   answer=Math.round((a-b)/den*100)/100;desc='Subtract signed decimals. Convert subtraction to addition of the opposite.';
+  }
+ }
+ return{text:expr,answer:String(answer),fmt,desc,data,grade};
+}
+
+function genMultiplicationProblem(){
+ const lvl=g.level,grade=saved.grade,type=rnd(1,100);
+ let expr,answer,fmt='number',data={},desc='Multiply the factors. Use repeated groups, arrays, or known facts to check your product.';
+ if(grade==='foundations'){
+  const top=lvl<3?5:lvl<6?8:12;
+  let a=rnd(2,top),b=rnd(1,lvl<4?6:12);
+  if(type>78){a=rnd(2,Math.min(6,top));b=rnd(2,Math.min(7,top));expr=`${a} groups of ${b}`;desc='Each group has the same number of items. Multiply the number of groups by the items in each group.'}
+  else expr=`${a} × ${b}`;
+  answer=a*b;
+ }else if(grade==='5'){
+  const a=rnd(2,lvl<=3?8:12),b=lvl<=4?rnd(2,12):lvl<=7?rnd(6,25):rnd(13,49);
+  expr=`${a} × ${b}`;answer=a*b;
+  desc='Break a factor into tens and ones, then use the distributive property to find the product.';
+ }else if(grade==='6'){
+  if(type<=58||lvl<=3){const den=lvl<6?10:100,a=rnd(13,lvl<6?99:850),b=rnd(2,12);expr=`${(a/den).toFixed(den===10?1:2)} × ${b}`;answer=Math.round(a*b/den*100)/100;desc='Multiply as whole numbers first, then place the decimal according to the original factor.'}
+  else{const a=rnd(11,98),b=rnd(11,98);expr=`${(a/10).toFixed(1)} × ${(b/10).toFixed(1)}`;answer=Math.round(a*b/100*100)/100;desc='Multiply as whole numbers, then count both decimal places in the answer.'}
+ }else if(grade==='7'){
+  if(type<52){const a=rnd(-23,23)||-3,b=rnd(-16,16)||5;expr=`${a} × (${b<0?b:'+'+b})`;answer=a*b;desc='A negative times a negative is positive; opposite signs give a negative product.'}
+  else{const a=rnd(-160,160)||-25,b=rnd(-95,95)||11;expr=`${(a/10).toFixed(1)} × (${b<0?(b/10).toFixed(1):'+'+(b/10).toFixed(1)})`;answer=Math.round(a*b/100*100)/100;desc='Determine the sign first, then multiply the magnitudes and position the decimal.'}
+ }else{
+  if(type<=57){const d1=[2,3,4,5,6,8,10][rnd(0,6)],d2=[2,3,4,5,6,8,10][rnd(0,6)];let a=rnd(-2*d1,2*d1)||1,b=rnd(-2*d2,2*d2)||-1;
+   data={num:a*b,den:d1*d2};fmt='fraction';expr=`${frac(a,d1)} × (${frac(b,d2)})`;answer=frac(data.num,data.den);desc='Multiply numerator by numerator and denominator by denominator, then simplify. Remember the sign.';
+  }else{const a=rnd(-180,180)||-15,b=rnd(-90,90)||12;expr=`${(a/10).toFixed(1)} × (${b<0?(b/10).toFixed(1):'+'+(b/10).toFixed(1)})`;answer=Math.round(a*b/100*100)/100;desc='Multiply the signed decimal factors, keeping track of the sign and decimal places.'}
+ }
+ return {text:expr,answer:String(answer),fmt,desc,data,grade};
+}
+
+
+// World 4 arithmetic: exact-quotient early levels, place-value division,
+// signed rational quotients and fraction division at higher grades. All
+// questions are generated from a known quotient to avoid rounding ambiguity.
+function genDivisionProblem(){
+ const lvl=g.level,grade=saved.grade,type=rnd(1,100);
+ let expr,answer,fmt='number',data={},desc='Division undoes multiplication. Check by multiplying your answer by the divisor.';
+ if(grade==='foundations'){
+  const max=lvl<3?5:lvl<6?9:12;
+  const divisor=rnd(2,max),quot=rnd(1,lvl<3?6:lvl<7?10:12),total=divisor*quot;
+  if(type>67){expr=`${total} gems ÷ ${divisor} groups`;desc='Split the gems into equal groups. Each group gets the quotient.'}
+  else{expr=`${total} ÷ ${divisor}`;desc='What multiplied by the divisor gives the total?'}
+  answer=quot;
+ }else if(grade==='5'){
+  const divisor=rnd(2,lvl<4?12:lvl<8?20:35);
+  const quot=rnd(lvl<4?3:8,lvl<4?15:lvl<8?35:85);
+  const total=divisor*quot;
+  expr=`${total} ÷ ${divisor}`;answer=quot;
+  desc='Use the long-division or partial-quotients method. Multiply back to check.';
+ }else if(grade==='6'){
+  if(type<=62){
+   const divisor=rnd(2,lvl<5?9:19),den=lvl<5?10:100,qn=rnd(15,lvl<5?199:795);
+   const total=qn*divisor/den;
+   expr=`${total.toFixed(den===10?1:2)} ÷ ${divisor}`;answer=Number((qn/den).toFixed(2));
+   desc='Divide the decimal by the whole number, aligning place values carefully.';
+  }else{
+   const dn=rnd(2,lvl<6?20:39),quot=rnd(2,lvl<6?20:65),total=dn*quot/10;
+   expr=`${total.toFixed(1)} ÷ ${(dn/10).toFixed(1)}`;answer=quot;
+   desc='Multiply both the dividend and divisor by ten to remove the decimal from the divisor.';
+  }
+ }else if(grade==='7'){
+  if(type<=56){
+   const divisor=(rnd(1,2)===1?-1:1)*rnd(2,16),qn=(rnd(1,2)===1?-1:1)*rnd(1,27);
+   expr=`${divisor*qn} ÷ (${divisor>0?'+':''}${divisor})`;answer=qn;
+   desc='A quotient is positive for matching signs and negative for different signs.';
+  }else{
+   const divisor=(rnd(1,2)===1?-1:1)*rnd(3,26),qn=(rnd(1,2)===1?-1:1)*rnd(2,85);
+   const dividend=divisor*qn/100;
+   expr=`${dividend.toFixed(2)} ÷ (${(divisor/10).toFixed(1)})`;answer=Number((qn/10).toFixed(1));
+   desc='First determine the sign. Shift the decimal in both numbers equally to divide.';
+  }
+ }else{
+  if(type<=58){
+   const a=(rnd(1,2)===1?-1:1)*rnd(1,13),b=rnd(2,12);
+   const c=(rnd(1,2)===1?-1:1)*rnd(1,11),d=rnd(2,12);
+   data={num:a*d,den:b*c};answer=frac(data.num,data.den);fmt='fraction';
+   expr=`(${frac(a,b)}) ÷ (${frac(c,d)})`;
+   desc='Multiply by the reciprocal of the second fraction, then simplify the result.';
+  }else{
+   const dn=(rnd(1,2)===1?-1:1)*rnd(2,45),qn=(rnd(1,2)===1?-1:1)*rnd(5,199);
+   const dividend=dn*qn/1000;
+   expr=`${dividend.toFixed(3)} ÷ (${(dn/10).toFixed(1)})`;
+   answer=Number((qn/100).toFixed(2));
+   desc='Clear the decimal divisor first. Then divide and apply the sign rules.';
+  }
+ }
+ return{text:expr,answer:String(answer),fmt,desc,data,grade};
+}
+
+
+// World 5: Four-operation review grows into multi-step arithmetic. Values are
+// held as exact rational pairs, avoiding ambiguous division and float drift.
+function nxRat(n,d=1){if(!d)throw Error('Zero denominator');if(d<0){n=-n;d=-d}const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a)||1;const g=gcd(n,d);return {n:n/g,d:d/g}}
+function nxAdd(a,b){return nxRat(a.n*b.d+b.n*a.d,a.d*b.d)}
+function nxSub(a,b){return nxRat(a.n*b.d-b.n*a.d,a.d*b.d)}
+function nxMul(a,b){return nxRat(a.n*b.n,a.d*b.d)}
+function nxDiv(a,b){return nxRat(a.n*b.d,a.d*b.n)}
+function genNexusProblem(){
+ const level=g.level,grade=saved.grade,opIndex=(g.questionCount+level-1)%4;
+ const op=['addition','subtraction','multiplication','division'][opIndex];
+ const signed=grade==='7'||grade==='8';
+ const fractions=grade==='8'&&level>=5;
+ const decimal=(grade==='6'&&level>=4)||(grade==='7'&&level>=7)||(grade==='8'&&level>=3&&!fractions);
+ const denominator=fractions?([2,3,4,5][rnd(0,3)]):decimal?10:1;
+ const cap=grade==='foundations'?Math.min(12,3+level):grade==='5'?Math.min(60,17+level*5):grade==='6'?Math.min(35,8+level*3):Math.min(30,8+level*2);
+ function val(min=grade==='5'?8:grade==='6'?3:1,max=cap){let num=fractions?rnd(denominator,denominator*Math.min(level>=8?5:3,cap)):rnd(min*denominator,max*denominator);if(signed&&rnd(0,3)===0)num=-num;return nxRat(num,denominator)}
+ function int(min=1,max=8){return nxRat(rnd(min,max))}
+ function v(v){let out=fractions?frac(v.n,v.d):String(Math.round(v.n/v.d*1000)/1000);return v.n<0?'('+out+')':out}
+ let a=val(),b=val(),c=int(2,grade==='foundations'?3:5),d=val(1,grade==='foundations'?5:cap);
+ let expression,answer,desc='Follow the order of operations: parentheses first, then multiplication or division, then addition or subtraction.';
+ if(level<=2){
+  if(opIndex===0){expression=v(a)+' + '+v(b);answer=nxAdd(a,b);desc='Add the values. Check the place values and signs.'}
+  else if(opIndex===1){if(!signed&&a.n/a.d<b.n/b.d)[a,b]=[b,a];expression=v(a)+' − '+v(b);answer=nxSub(a,b);desc='Find the difference. Subtract from the first quantity.'}
+  else if(opIndex===2){c=int(2,grade==='foundations'?5:10);expression=v(a)+' × '+v(c);answer=nxMul(a,c);desc='Multiply the factors; an array or repeated groups may help.'}
+  else{c=int(2,grade==='foundations'?5:12);const total=nxMul(a,c);expression=v(total)+' ÷ '+v(c);answer=a;desc='Use multiplication to check the equal-group division.'}
+ }else if(level<=6){
+  if(opIndex===0){expression='('+v(a)+' + '+v(b)+') × '+v(c);answer=nxMul(nxAdd(a,b),c);desc='Add inside the parentheses first, then multiply.'}
+  else if(opIndex===1){if(!signed&&b.n/b.d>a.n/a.d*c.n/c.d)b=nxMul(a,c);expression='('+v(a)+' × '+v(c)+') − '+v(b);answer=nxSub(nxMul(a,c),b);desc='Multiply before subtracting.'}
+  else if(opIndex===2){const totalA=nxMul(a,c),totalB=nxMul(b,c);expression='('+v(totalA)+' + '+v(totalB)+') ÷ '+v(c);answer=nxAdd(a,b);desc='Add inside parentheses, then divide into equal groups.'}
+  else{const total=nxMul(a,c);expression='('+v(total)+' ÷ '+v(c)+') + '+v(b);answer=nxAdd(a,b);desc='Divide the first pair, then add the remaining value.'}
+ }else{
+  if(opIndex===0){if(!signed&&d.n/d.d>(a.n/a.d+b.n/b.d)*c.n/c.d)d=nxMul(nxAdd(a,b),c);expression='('+v(a)+' + '+v(b)+') × '+v(c)+' − '+v(d);answer=nxSub(nxMul(nxAdd(a,b),c),d);desc='Solve parentheses, multiply, then subtract.'}
+  else if(opIndex===1){if(!signed&&d.n/d.d>a.n/a.d*b.n/b.d)d=nxMul(a,b);const numer=nxMul(c,d);expression='('+v(a)+' × '+v(b)+') − ('+v(numer)+' ÷ '+v(c)+')';answer=nxSub(nxMul(a,b),d);desc='Complete both parenthesized calculations, then subtract.'}
+  else if(opIndex===2){const totalA=nxMul(a,c),totalB=nxMul(b,c);expression='(('+v(totalA)+' + '+v(totalB)+') ÷ '+v(c)+') × '+v(d);answer=nxMul(nxAdd(a,b),d);desc='Work from innermost parentheses outward; multiplication and division are peers.'}
+  else{const total=nxMul(a,c);expression='(('+v(total)+' ÷ '+v(c)+') + '+v(b)+') × '+v(d);answer=nxMul(nxAdd(a,b),d);desc='Divide, add, then multiply after resolving the grouped expression.'}
+ }
+ const fmt=fractions?'fraction':'number';
+ return{text:expression,answer:fractions?frac(answer.n,answer.d):String(Math.round(answer.n/answer.d*1000)/1000),fmt,
+  data:{num:answer.n,den:answer.d},desc,grade,operation:op};
+}
+
+function makeChoices(p){const ans=p.answer,res=[ans];if(p.fmt==='fraction'){
+ const a=p.data.num,b=p.data.den;let poss=[frac(a+1,b),frac(a-1,b),frac(a,b+1),frac(a,b-1||1),frac(a+2,b),frac(-a,b),frac(a*2,b)];for(let x of poss)if(x!==ans&&!res.includes(x)&&res.length<4)res.push(x)
+ }else{
+ const a=Number(ans),units=saved.grade==='6'||saved.grade==='8'?(g.level>=6?.01:.1):1;
+ const moves=[units,-units,2*units,-2*units,10*units,-10*units,1,-1,10,-10,100,-100];
+ for(let offset of moves){const test=String(Math.round((a+offset)*100)/100);if(test!==ans&&!res.includes(test)&&res.length<4)res.push(test)}
+ }let i=0;while(res.length<4&&i++<20){let v=String(Math.round((Number(ans)||0)+rnd(-15,15)+i));if(!res.includes(v))res.push(v)}
+ for(let j=res.length-1;j>0;j--){let k=rnd(0,j);[res[j],res[k]]=[res[k],res[j]]}return res;
+}
+function newQuestion(){let q;for(let tries=0;tries<70;tries++){q=genProblem();if(!g.recent.includes(q.text))break}g.recent.push(q.text);g.recent=g.recent.slice(-30);q.options=makeChoices(q);q.typed=choiceNeedsTyping();q.errors=0;q.completed=false;g.question=q;return q}
+function normalize(a){return String(a).trim().replace(/,/g,'').replace(/[−–]/g,'-').replace(/\s/g,'')}
+function fractionNum(s){let m=s.match(/^([+-]?\d+)\/([+-]?\d+)$/);return m&&Number(m[2])!==0?Number(m[1])/Number(m[2]):null}
+function mathCorrect(user,q){let x=normalize(user);if(!x)return false;if(q.fmt==='fraction'){
+ const u=x.includes('/')?fractionNum(x):/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(x)?Number(x):null;return u!==null&&Number.isFinite(u)&&Math.abs(u-q.data.num/q.data.den)<1e-8
+ }if(!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(x))return false;return Math.abs(Number(x)-Number(q.answer))<1e-8}
+function quiz(mandatory=false){if(mode!=='play'||(!mandatory&&g.questionTimer>0))return;mode='quiz';let q=newQuestion();q.mandatory=mandatory;mathScreen();sound(700,.1,'triangle')}
+function mathScreen(feedback='',status=''){let q=g.question;const buttons=q.options.map((x,i)=>`<button class="answer" data-opt="${i}" ${q.completed?'disabled':''}>${esc(x)}</button>`).join('');show(`<div class="screen narrow"><div class="eyebrow">World ${g.world} · ${q.mandatory?'Wave '+g.wave+' Checkpoint':'Bonus '+realmSubject(g.world)+' Challenge'} · Level ${g.level}</div><h1 class="brand" style="font-size:clamp(22px,3vw,34px)">Charge the Heartstone</h1><p class="sub">Battle time is paused while you solve. A correct answer earns <strong style="color:#a2fbe7">+${q.errors?65:95} Spark</strong> and charges your Crystal Burst.</p><div class="mathProblem"><div class="eyebrow">${g.world===5?'MIXED OPERATIONS · '+q.operation.toUpperCase()+' FOCUS · ':''}${q.typed?'Enter your answer':'Choose the correct '+(g.world===1?'sum':g.world===2?'difference':g.world===3?'product':g.world===4?'quotient':'value')}</div><div class="big">${esc(q.text)} = ?</div></div>${q.typed?`<form class="entry" id="typed"><input id="userValue" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="${q.fmt==='fraction'?'e.g. 3/4 or 0.75':'Type your answer'}" aria-label="Your answer" ${q.completed?'disabled':''}><button type="submit" class="action green" ${q.completed?'disabled':''}>Check</button></form>`:`<div class="answers">${buttons}</div>`}${feedback?`<div class="message ${status==='correct'?'good':status==='incorrect'?'bad':''}">${feedback}</div>`:''}<div class="row" style="margin-top:10px"><span class="small">${q.errors?`Attempts: ${q.errors+1}`:'Take your time. No timer on math.'}</span>${q.completed?'<button class="action green" id="continue">Return to battle</button>':q.mandatory?'<span class="small">Answer to continue this wave. Two tries, then an explanation.</span>':'<button class="action alt" id="skip">Skip (+0 Spark)</button>'}</div></div>`);
+ if(q.typed&&!q.completed){const f=layer.querySelector('#typed');f.onsubmit=e=>{e.preventDefault();evaluate(layer.querySelector('#userValue').value)};layer.querySelector('#userValue').focus()}
+ else if(!q.completed){layer.querySelectorAll('[data-opt]').forEach(el=>el.onclick=()=>evaluate(q.options[+el.dataset.opt]))}
+ let skip=layer.querySelector('#skip');if(skip)skip.onclick=()=>{g.streak=0;if(g.world===3)g.combo=0;if(g.world===4)g.prismStreak=0;if(g.world===5)g.nexusMask=0;g.questionTimer=18;g.question=null;mode='play';hide()};let cont=layer.querySelector('#continue');if(cont)cont.onclick=returnBattle;
+}
+function evaluate(value){if(mode!=='quiz'||g.question.completed)return;let q=g.question;let correct=mathCorrect(value,q);if(correct){let reward=q.errors?65:95;g.spark+=reward;g.energy=Math.min(100,g.energy+(q.errors?24:42));g.correct++;g.tries++;g.streak=q.errors?1:g.streak+1;q.completed=true;g.questionTimer=18;g.questionCount++;let overclock=0,prismHeal=0,nexusReward=false;if(g.world===3){g.combo=q.errors?0:g.combo+1;if(g.combo>=3){overclock=15;g.spark+=overclock;g.energy=Math.min(100,g.energy+5)}}if(g.world===4){g.prismStreak=q.errors?0:g.prismStreak+1;if(g.prismStreak>=3){prismHeal=Math.min(5,100-g.life);g.life+=prismHeal;g.energy=Math.min(100,g.energy+7);g.prismStreak=0;}}
+ if(g.world===5){
+  if(q.errors)g.nexusMask=0;
+  else{
+   const bit=1<<['addition','subtraction','multiplication','division'].indexOf(q.operation);
+   g.nexusMask|=bit;
+   if(g.nexusMask===15){g.nexusMask=0;g.nexusCycles++;g.spark+=35;g.energy=Math.min(100,g.energy+12);g.life=Math.min(100,g.life+3);nexusReward=true;spawnParticles(642,310,24,'#dfafff');}
+  }
+ }
+ saved.seen=g.recent.slice(-30);persist();mathScreen(`<strong>Correct!</strong> +${reward} Spark · Crystal Burst +${q.errors?24:42}%.${overclock?' CLOCKWORK COMBO +15 Spark / +5% Burst!':''}${g.world===4&&prismHeal?' PRISM RENEWAL: Heartstone +'+Math.round(prismHeal)+'% and Burst +7%!':''}${nexusReward?' NEXUS HARMONY: +35 Spark, +12% Burst, +3% Heartstone!':''}<br>${esc(q.desc)}`,'correct');sound(960,.19,'triangle')}
+ else{q.errors++;g.tries++;if(g.world===3)g.combo=0;if(g.world===4)g.prismStreak=0;if(g.world===5)g.nexusMask=0;if(q.errors>=2){g.streak=0;q.completed=true;g.questionTimer=18;g.questionCount++;saved.seen=g.recent.slice(-30);persist();mathScreen(`<strong>Not quite. The answer is ${esc(q.answer)}.</strong> No Spark awarded this time.<br>${esc(q.desc)}`,'incorrect');sound(190,.12,'sawtooth')}
+ else{mathScreen(`<strong>Try again.</strong> ${esc(q.desc)}`,'incorrect');sound(240,.09,'sine')}}}
+function returnBattle(){
+ const checkpoint=g?.question?.mandatory;
+ if(g){g.question=null;if(checkpoint)g.waveFlash=2.9;}
+ mode='play';hide();
+}
+function spawnParticles(x,y,n,color){if(!g)return;for(let i=0;i<n;i++)g.particles.push({x,y,vx:(Math.random()-.5)*130,vy:(Math.random()-.6)*110,life:Math.random()*.7+.35,color,size:rnd(2,5)})}
+function spawn(s){
+ const e=EN[s.kind],mult=1+(g.level-1)*.095+(BOSSES.includes(s.kind)?0:.022*(s.wave-1));
+ g.enemies.push({kind:s.kind,lane:s.lane,x:1197+rnd(0,42),hp:Math.round(e.hp*mult),maxHp:Math.round(e.hp*mult),attackTimer:0,hitFlash:0,slowTimer:0,stunTimer:0,bob:rnd(0,628)/100});
+}
+function tick(dt){
+ if(mode!=='play'||!g||g.finished)return;
+ dt=Math.min(.05,dt);
+ g.time+=dt;g.msgTime=Math.max(0,g.msgTime-dt);g.helpTimer=Math.max(0,g.helpTimer-dt);g.waveFlash=Math.max(0,g.waveFlash-dt);
+ g.questionTimer=Math.max(0,g.questionTimer-dt);g.passive+=dt;
+ while(g.passive>=7){g.passive-=7;g.spark+=20}
+ for(let i=0;i<4;i++)g.cool[i]=Math.max(0,g.cool[i]-dt);
+ let waveCheckpoint=false;
+ while(g.spawned<g.schedule.length&&g.schedule[g.spawned].at<=g.time){
+  let s=g.schedule[g.spawned++],oldWave=g.wave;spawn(s);g.wave=Math.max(g.wave,s.wave);
+  if(g.wave>oldWave)waveCheckpoint=true;sound(145,.04,'triangle',.015);
+ }
+ if(waveCheckpoint){quiz(true);return}
+ for(let u of g.placed){
+  const d=spec(u.type);
+  u.timer-=dt;u.attackFlash=Math.max(0,(u.attackFlash||0)-dt);u.hitFlash=Math.max(0,(u.hitFlash||0)-dt);u.summonFlash=Math.max(0,(u.summonFlash||0)-dt);
+  if(u.type===2){
+   if(u.timer<=0){u.timer+=d.rate;g.spark+=d.income;spawnParticles(u.x,u.y-22,7,'#71fbdc');g.floaters.push({x:u.x,y:u.y-65,v:0,life:1.2,label:'+'+d.income,color:'#a0ffb7'})}
+   u.vineTimer-=dt;
+   const vineTarget=g.enemies.filter(e=>e.lane===u.row&&e.x>u.x+12&&e.x<u.x+d.range&&e.hp>0).sort((a,b)=>a.x-b.x)[0];
+   if(vineTarget&&u.vineTimer<=0){
+    u.vineTimer=5.8+Math.random()*1.5;u.attackFlash=.48;
+    g.shots.push({x:u.x+21,y:u.y-24,row:u.row,target:vineTarget,damage:d.dmg,v:360,area:0,type:'vine'});
+    sound(360,.06,'sine',.015);
+   }
+   continue;
+  }
+  if(!d.dmg||u.timer>0)continue;
+  const target=g.enemies.filter(e=>e.lane===u.row&&e.hp>0&&e.x>u.x-14&&e.x<u.x+d.range).sort((a,b)=>a.x-b.x)[0];
+  if(target){
+   u.timer=d.rate;u.attackFlash=.4;
+   const type=u.type===0?'wind':u.type===1?'rock':'fire';
+   g.shots.push({x:u.x+26,y:u.y-(u.type===1?13:20),row:u.row,target,damage:d.dmg,v:u.type===3?330:u.type===1?280:610,area:u.type===3?d.splash||92:0,type});
+   sound(u.type===3?240:u.type===1?140:520,.055,u.type===3?'sawtooth':'triangle',.017);
+  }
+ }
+ for(let i=g.shots.length-1;i>=0;i--){
+  let s=g.shots[i];if(!g.enemies.includes(s.target)){g.shots.splice(i,1);continue}
+  let tx=s.target.x,ty=LANES[s.row]-(BOSSES.includes(s.target.kind)?36:16),dx=tx-s.x,dy=ty-s.y,dist=Math.hypot(dx,dy),m=s.v*dt;
+  if(dist>m){s.x+=dx/dist*m;s.y+=dy/dist*m}
+  else{
+   g.shots.splice(i,1);
+   for(let e of g.enemies){
+    if(e.lane===s.row&&(s.area?Math.abs(e.x-tx)<s.area:e===s.target)){
+     e.hp-=s.damage;e.hitFlash=.18;
+     if(s.type==='vine')e.slowTimer=Math.max(e.slowTimer,3.3);
+     if(s.type==='rock')e.stunTimer=Math.max(e.stunTimer,.3);
+     spawnParticles(e.x,LANES[e.lane]-10,s.area?13:7,s.type==='vine'?'#83ff9e':s.type==='wind'?'#b0f4ff':s.type==='rock'?'#e8c29a':'#ffb46f');
+     if(s.area)g.portalPulse=1;
+    }
+   }
+  }
+ }
+ for(let e of g.enemies){
+  if(e.hp<=0)continue;
+  const cfg=EN[e.kind];e.hitFlash=Math.max(0,(e.hitFlash||0)-dt);e.slowTimer=Math.max(0,(e.slowTimer||0)-dt);e.stunTimer=Math.max(0,(e.stunTimer||0)-dt);
+  if(e.stunTimer>0)continue;
+  const blocker=g.placed.filter(u=>u.row===e.lane&&u.x<e.x+20&&u.x>e.x-41).sort((a,b)=>b.x-a.x)[0];
+  if(blocker){e.attackTimer-=dt;if(e.attackTimer<=0){blocker.hp-=cfg.attack;blocker.hitFlash=.35;e.attackTimer=cfg.rate;spawnParticles(blocker.x,blocker.y,5,'#ffb27b')}}
+  else e.x-=cfg.speed*dt*(1+g.level*.018)*(e.slowTimer>0?.48:1);
+  if(e.x<LEFT){e.hp=-1;g.life-=BOSSES.includes(e.kind)?100:HEAVIES.includes(e.kind)?24:12;g.misses++;spawnParticles(LEFT,LANES[e.lane],18,'#ff9766');g.msg='A monster breached the Heartstone!';g.msgTime=2.3;sound(130,.3,'sawtooth',.08)}
+ }
+ g.placed=g.placed.filter(u=>u.hp>0);
+ for(let i=g.enemies.length-1;i>=0;i--)if(g.enemies[i].hp<=0){
+  const e=g.enemies.splice(i,1)[0];
+  if(e.x>=LEFT){g.kills++;g.spark+=EN[e.kind].reward;g.energy=Math.min(100,g.energy+(BOSSES.includes(e.kind)?25:2));spawnParticles(e.x,LANES[e.lane],15,'#ff9a68')}
+ }
+ for(let p of g.particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=65*dt;p.life-=dt}
+ g.particles=g.particles.filter(p=>p.life>0);
+ for(let f of g.floaters){f.y-=25*dt;f.life-=dt}g.floaters=g.floaters.filter(f=>f.life>0);
+ g.portalPulse=Math.max(0,g.portalPulse-dt);
+ if(g.life<=0){finish(false);return}
+ if(g.spawned===g.schedule.length&&g.enemies.length===0&&g.time>=g.schedule[g.schedule.length-1].at){finish(true)}
+}
+function finish(win){if(!g||g.finished)return;g.finished=true;mode='result';let accuracy=g.tries?Math.round(g.correct/g.tries*100):0,stars=win?(g.life>=85&&accuracy>=75&&g.correct>=Math.ceil(g.wave/2)?3:g.life>=50&&g.correct>=1?2:1):0,earned=0;if(win){const k=levelKey(g.world,g.level),prev=saved.levels[k]?.stars||0;earned=prev?1:2+Math.max(0,stars-1);saved.levels[k]={stars:Math.max(prev,stars)};saved.shards+=earned;saved.wins++;persist()}
+ show(`<div class="screen narrow"><div class="eyebrow">${win?'World '+g.world+' · '+realmName(g.world)+' secured':'The Heartstone has fallen'}</div><h1 class="brand">${win?(g.level===10?(g.world===1?'THE TITAN FALLS':g.world===2?'GLACIER BOSS DEFEATED':g.world===3?'CLOCKWORK TITAN DEFEATED':g.world===4?'AMETHYST COLOSSUS DEFEATED':'NEXUS OVERLORD DEFEATED'):'VICTORY!'):'DEFENSE BREACHED'}</h1><p>${win?`The guardians protected the Heartstone through all ${g.wave} waves.`:'The monsters reached your fortress. Try more blockers and Rangers, and answer challenges for extra Spark.'}</p><h2 class="stars" style="font-size:36px;margin:10px 0">${win?starText(stars):'☆☆☆'}</h2><div class="results"><div>Remaining Heartstone: <strong>${Math.max(0,Math.round(g.life))}%</strong></div><div>Monsters defeated: <strong>${g.kills}</strong></div><div>Math correct: <strong>${g.correct}/${g.tries}</strong></div><div>Accuracy: <strong>${accuracy}%</strong></div><div>Wave reached: <strong>${g.wave}</strong></div><div>Heartstone Shards: <strong>${win?'+'+earned:'0'}</strong></div></div>${win&&g.level===10?'<div class="message good">'+(g.world===1?'Emberwood Valley is restored! You can now travel into Frostbite Pass.':g.world===2?'Frostbite Pass is safe. Subtraction mastered. Clockwork Dominion awaits in World 3!':g.world===3?'The Clockwork Dominion is safe! Division awaits in the Crystal Depths.':g.world===4?'The Crystal Depths are secure! The final Chaos Nexus is now playable in World 5!':'The Nexus Overlord has fallen! All five realms are united. You have completed the 50-level Mathbound campaign!')+'</div>':''}<div class="row"><button class="action green" id="again">${win?'Replay Battle':'Retry Battle'}</button>${win&&g.level<10?`<button class="action" id="next">Next Battle: ${g.level+1}</button>`:''}<button class="action alt" id="home">Campaign Map</button></div></div>`);layer.querySelector('#again').onclick=()=>start(g.level);const next=layer.querySelector('#next');if(next)next.onclick=()=>start(g.level+1);layer.querySelector('#home').onclick=()=>{if(win&&g.level<10)selected=g.level+1;renderMenu()};sound(win?950:130,.4,win?'triangle':'sawtooth')}
+function pauseScreen(){if(!g)return;mode='pause';show(`<div class="screen narrow"><div class="eyebrow">Battle paused</div><h1 class="brand">${chapter(g.level)}</h1><p>Wave ${g.wave} · Heartstone ${Math.max(0,Math.round(g.life))}% · ${Math.floor(g.spark)} Spark</p><div class="message"><strong>Controls:</strong> Click a defender card (or press 1–4), then click an open tile to deploy. Each wave starts with a math checkpoint; M opens bonus math challenges. Press Space for a charged Crystal Burst. P pauses or resumes. Questions pause the battle timer.</div><div class="row"><button class="action green" id="resume">Resume</button><button class="action alt" id="restart">Restart</button><button class="action alt" id="audio">Sound: ${soundOn?'ON':'OFF'}</button><button class="action alt" id="home">Campaign Map</button></div></div>`);layer.querySelector('#resume').onclick=resume;layer.querySelector('#restart').onclick=()=>start(g.level);layer.querySelector('#home').onclick=renderMenu;layer.querySelector('#audio').onclick=toggleSound}
+function resume(){mode='play';hide()}
+function drawImg(name,x,y,w,h){
+ const a=imgs[name];if(!a||!a.complete||!a.naturalWidth)return;
+ const old=ctx.imageSmoothingEnabled;ctx.imageSmoothingEnabled=false;
+ ctx.drawImage(a,Math.round(x-w/2),Math.round(y-h/2),Math.round(w),Math.round(h));
+ ctx.imageSmoothingEnabled=old;
+}
+function rectangle(x,y,w,h,color,stroke){ctx.fillStyle=color;ctx.fillRect(x,y,w,h);if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.strokeRect(x,y,w,h)}}
+function text(str,x,y,size=19,fill='#fff8df',align='left',stroke='#1b1c30'){ctx.font=`900 ${size}px Trebuchet MS,Arial,sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';if(stroke){ctx.lineWidth=Math.max(3,size/5);ctx.lineJoin='round';ctx.strokeStyle=stroke;ctx.strokeText(str,x,y)}ctx.fillStyle=fill;ctx.fillText(str,x,y)}
+function bar(x,y,w,h,p,col){rectangle(x,y,w,h,'#18252f','#8b806c');rectangle(x+2,y+2,Math.max(0,(w-4)*Math.max(0,Math.min(1,p))),h-4,col)}
+function cutPanel(x,y,w,h,fill='#241b39ee',trim='#e1b66e'){
+ const grad=ctx.createLinearGradient(x,y,x,y+h);grad.addColorStop(0,fill);grad.addColorStop(1,'#161a31f7');ctx.fillStyle='#130e1bbf';ctx.fillRect(x+4,y+6,w,h);ctx.fillStyle=grad;ctx.fillRect(x,y,w,h);ctx.lineWidth=3;ctx.strokeStyle='#171327';ctx.strokeRect(x+1,y+1,w-2,h-2);ctx.lineWidth=2;ctx.strokeStyle=trim;ctx.strokeRect(x+5,y+5,w-10,h-10);ctx.lineWidth=1;ctx.strokeStyle='#ffe3a9aa';ctx.beginPath();ctx.moveTo(x+12,y+10);ctx.lineTo(x+w-12,y+10);ctx.stroke();
+ for(let dx of [10,w-10])for(let dy of [10,h-10]){ctx.save();ctx.translate(x+dx,y+dy);ctx.rotate(Math.PI/4);ctx.fillStyle='#f5b966';ctx.fillRect(-3,-3,6,6);ctx.fillStyle='#ffebc8';ctx.fillRect(-1,-1,2,2);ctx.restore()}}
+function ribbon(x,y,w,label,small=''){
+ ctx.save();ctx.shadowColor='#090b1e';ctx.shadowBlur=9;ctx.fillStyle='#3a1c36';ctx.beginPath();ctx.moveTo(x+17,y);ctx.lineTo(x+w-17,y);ctx.lineTo(x+w,y+18);ctx.lineTo(x+w-17,y+36);ctx.lineTo(x+17,y+36);ctx.lineTo(x,y+18);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#f4b965';ctx.lineWidth=3;ctx.stroke();text(label,x+w/2,y+18,small?19:23,'#ffdfa3','center');ctx.restore();if(small)text(small,x+w/2,y+49,15,'#f4d1bc','center')}
+function manaCrystal(x,y,r=13){ctx.save();ctx.shadowBlur=14;ctx.shadowColor='#40daf8';ctx.fillStyle='#1476b7';ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r*.75,y);ctx.lineTo(x,y+r);ctx.lineTo(x-r*.75,y);ctx.closePath();ctx.fill();ctx.strokeStyle='#d0ffff';ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.moveTo(x,y-r+3);ctx.lineTo(x,y+r-3);ctx.stroke();ctx.restore()}
+// v0.3 elemental combat particles and ornaments are drawn as lightweight vector effects.
+function roundPanel(x,y,w,h,r,fill,stroke){
+ ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();
+ if(stroke){ctx.lineWidth=2;ctx.strokeStyle=stroke;ctx.stroke()}
+}
+function particleOrb(x,y,r,color){ctx.save();ctx.shadowBlur=16;ctx.shadowColor=color;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore()}
+function paintProjectile(s,t){
+ ctx.save();ctx.translate(s.x,s.y);let phase=t*8+s.x*.019;
+ if(s.type==='wind'){
+  ctx.shadowColor='#84ecff';ctx.shadowBlur=17;ctx.strokeStyle='#9af4ff';ctx.lineCap='round';
+  for(let j=0;j<3;j++){ctx.beginPath();ctx.lineWidth=4-j;let dy=Math.sin(phase+j*2)*8;ctx.moveTo(-18-j*5,dy+8);ctx.quadraticCurveTo(-2,dy-13,13,dy-2);ctx.stroke()}
+  particleOrb(10,0,5,'#ebffff');
+ }else if(s.type==='rock'){
+  ctx.rotate(phase*.3);ctx.shadowColor='#c58c48';ctx.shadowBlur=6;
+  ctx.fillStyle='#9d725c';ctx.strokeStyle='#f4d8a8';ctx.lineWidth=2;
+  ctx.beginPath();[[0,-13],[12,-6],[15,7],[6,14],[-11,11],[-16,-3]].forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#eec18a';ctx.fillRect(-7,-6,7,5);
+ }else if(s.type==='vine'){
+  ctx.strokeStyle='#6dffad';ctx.lineWidth=4;ctx.shadowBlur=11;ctx.shadowColor='#5bffa0';
+  ctx.beginPath();ctx.moveTo(-25,4);ctx.bezierCurveTo(-12,-16,5,17,19,-1);ctx.stroke();
+  for(let i=-1;i<=1;i++){ctx.save();ctx.translate(i*12,Math.sin(phase+i)*6);ctx.rotate(-.6+i*.55);ctx.fillStyle='#a7ff79';ctx.beginPath();ctx.ellipse(0,0,7,3,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+ }else{
+  ctx.shadowColor='#ff822e';ctx.shadowBlur=22;for(let i=4;i>=0;i--){ctx.fillStyle=i%2?'#f67c32':'#ffcf67';ctx.beginPath();ctx.ellipse(-i*6,Math.sin(phase+i)*3,Math.max(3,15-i*3),Math.max(3,12-i*2),0,0,Math.PI*2);ctx.fill()}
+  particleOrb(7,0,7,'#fff0a6');
+ }
+ ctx.restore();
+}
+function paintGuardian(u,t){
+ const x=u.x,y=u.y,attack=u.attackFlash||0,summon=u.summonFlash||0;
+ ctx.save();
+ ctx.fillStyle='#100e2477';ctx.beginPath();ctx.ellipse(x,y+27,38,11,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle=['#f6a957','#adbbff','#71e8af','#ff936d'][u.type];ctx.lineWidth=2.6;ctx.globalAlpha=.62+.12*Math.sin(t*3+u.bob);
+ ctx.beginPath();ctx.ellipse(x,y+20,31+attack*6,11+attack*2,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;
+ if(summon>0){ctx.globalAlpha=summon*.65;ctx.strokeStyle='#b3ffe9';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(x,y+18,28+(1-summon)*29,9+(1-summon)*13,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1}
+ let bounce=Math.sin(t*(u.type===0?4.8:u.type===3?3.5:2.6)+u.bob)*3;
+ ctx.translate(x,y-6+bounce);
+ if(u.type===0)ctx.rotate(-.035-attack*.1+Math.sin(t*6+u.bob)*.025);
+ if(u.type===1)ctx.rotate(-attack*.07);
+ if(u.type===3)ctx.rotate(attack*.06+Math.sin(t*3+u.bob)*.012);
+ if(u.hitFlash>0){ctx.shadowBlur=22;ctx.shadowColor='#ff6b59'}
+ drawImg(DEF[u.type].id,0,-18,u.type===1?94:91,u.type===1?94:91);
+ if(attack>0){
+  const tint=u.type===0?'#9ff7ff':u.type===1?'#ffd498':u.type===2?'#bfffab':'#ffb96a';
+  ctx.globalAlpha=attack*.9;particleOrb(33,-30,6+attack*13,tint);ctx.globalAlpha=1;
+ }
+ if(u.type===2){
+  for(let i=0;i<3;i++){let ang=t*(i%2?1.15:-1.1)+i*2.09;ctx.save();ctx.translate(Math.cos(ang)*25,-34+Math.sin(ang)*15);ctx.rotate(ang);ctx.fillStyle='#a4f780';ctx.beginPath();ctx.ellipse(0,0,6,3,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+ }
+ ctx.restore();
+ if(u.hp<u.maxHp)bar(x-31,y-47,62,7,u.hp/u.maxHp,'#92f7b0');
+ if(saved.upgrades[u.type])text('◆'.repeat(Math.min(saved.upgrades[u.type],3)),x,y+32,12,'#dcffcf','center');
+}
+function paintEnemy(e,t){
+ const y=LANES[e.lane],s=EN[e.kind].scale;
+ ctx.save();ctx.fillStyle='#140a1477';ctx.beginPath();ctx.ellipse(e.x,y+25,31*s,10*s,0,0,Math.PI*2);ctx.fill();
+ let bouncing=Math.sin(t*(RUNNERS.includes(e.kind)?8.6:4.2)+e.bob)*(['ashwisp','icewisp','staticwisp','prismwisp'].includes(e.kind)?7:3);
+ let base=BOSSES.includes(e.kind)?152:HEAVIES.includes(e.kind)?102:RUNNERS.includes(e.kind)?77:85;
+ if(e.slowTimer>0){ctx.strokeStyle='#6dff9e';ctx.globalAlpha=.65+Math.sin(t*8)*.15;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(e.x,y+20,35*s,11*s,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1}
+ if(e.kind==='nexusoverlord'){
+  for(let i=0;i<7;i++){let a=t*.8+i*Math.PI*2/7;particleOrb(e.x+Math.cos(a)*53,y-29+Math.sin(a)*50,3.6,['#ff9cde','#72f6ef','#ffd07d','#ab9dff'][i%4]);}
+ }
+ if(e.hitFlash>0){ctx.shadowColor='#ffebbd';ctx.shadowBlur=24}
+ ctx.translate(e.x,y-14+bouncing);ctx.rotate(Math.sin(t*4+e.bob)*.019);
+ if(e.kind==='nexusoverlord'){ctx.shadowColor='#a460ff';ctx.shadowBlur=25;ctx.filter='hue-rotate('+Math.round(t*38%360)+'deg) saturate(1.5)'}
+ drawImg(e.kind,0,0,base*s*(BOSSES.includes(e.kind)?.78:1),base*s*(BOSSES.includes(e.kind)?.78:1));ctx.filter='none';
+ ctx.restore();
+ bar(e.x-30*s,y-49*s,60*s,6,e.hp/e.maxHp,BOSSES.includes(e.kind)?(g?.world===2?'#b6f6ff':g?.world===3?'#ffe091':g?.world===4?'#b0ffff':g?.world===5?'#efadff':'#ffab59'):'#7de3a2');
+}
+function paintPortal(t){
+ // Inset animated rift compensates for the source panorama ending at the screen edge.
+ ctx.save();let x=1205,y=388;
+ ctx.globalAlpha=.42;ctx.shadowBlur=22;ctx.shadowColor=g?.world===2?'#55eeff':g?.world===3?'#e9a4ff':g?.world===4?'#86f8ff':g?.world===5?'#ff85ee':'#d45cff';ctx.strokeStyle=g?.world===2?'#9befff':g?.world===3?'#d9a4ff':g?.world===4?'#b5a0ff':g?.world===5?'#ffadff':'#b35afd';ctx.lineWidth=5;
+ ctx.beginPath();ctx.ellipse(x,y,42+Math.sin(t*1.6)*4,124+Math.cos(t*1.9)*6,0,0,Math.PI*2);ctx.stroke();
+ ctx.globalAlpha=.32;ctx.strokeStyle=g?.world===2?'#e3ffff':g?.world===3?'#fff0bf':g?.world===4?'#d9ffff':g?.world===5?'#e6afff':'#fff0ff';ctx.lineWidth=2;
+ for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(x,y,12+i*10,93-i*15,t*.2+i,0,Math.PI*1.48);ctx.stroke()}
+ ctx.restore();
+}
+function drawHUD(t){
+ cutPanel(0,-3,1280,116,g.world===2?'#112f4af5':g.world===3?'#1d1739f5':g.world===4?'#172e53f5':g.world===5?'#2b1646f5':'#171c30f5',g.world===2?'#91dced':g.world===3?'#e7bf78':g.world===4?'#9debe8':g.world===5?'#d6a5ff':'#d6a76a');
+ // Brand crest and title
+ roundPanel(9,10,226,90,8,g.world===2?'#17445bf2':g.world===3?'#4c3157f2':g.world===4?'#2e3b70f2':g.world===5?'#42235df2':'#392137f2',g.world===2?'#8ccddd':g.world===3?'#e6b66d':g.world===4?'#8eddd9':g.world===5?'#df9df7':'#d89b61');
+ text('MATHBOUND',122,39,29,'#ffe7a5','center','#3e2940');
+ text('SIEGE OF THE REALMS',122,67,12,'#c9e7ef','center');
+ ctx.fillStyle='#ffc46a';ctx.beginPath();ctx.moveTo(24,21);ctx.lineTo(37,15);ctx.lineTo(37,30);ctx.closePath();ctx.fill();
+ // Realm identification
+ cutPanel(240,10,237,90,'#292b49f0','#a08ca0');
+ text('WORLD '+g.world+'  ·  '+realmSubject(g.world).toUpperCase(),358,29,14,'#9ce9c7','center');
+ text(g.world===1?'EMBERWOOD':g.world===2?'FROSTBITE PASS':g.world===3?'CLOCKWORK':g.world===4?'CRYSTAL DEPTHS':'CHAOS NEXUS',358,54,25,'#ffe4aa','center');
+ text('LEVEL '+g.level+' / 10',358,79,15,'#f0ccd0','center');
+ cutPanel(483,10,170,90,'#28374af0','#87afbc');
+ text('HEARTSTONE',568,29,13,'#f9ddb1','center');
+ text(Math.max(0,Math.round(g.life))+'%',568,52,27,g.life<36?'#ffa1a2':'#d2ffe2','center');
+ bar(505,79,126,12,g.life/100,g.life>35?'#61d6a8':'#ee654d');
+ cutPanel(659,10,147,90,'#292f49f0','#8aa0b7');
+ manaCrystal(685,55,12);text('SPARK',747,29,13,'#d5fbff','center');
+ text(Math.floor(g.spark),746,60,28,'#fff0bd','center');
+ cutPanel(812,10,172,90,'#302d4ceb','#9a95bf');
+ text('CRYSTAL BURST',898,29,13,'#f9d99f','center');
+ text(Math.floor(g.energy)+'%',899,55,27,g.energy>=100?'#ffe18c':'#b4f8f0','center');
+ bar(829,79,139,12,g.energy/100,g.energy>=100?'#ffc46e':'#71d8e0');
+ cutPanel(990,10,153,90,'#302d4ceb','#a68d9d');
+ text('WAVE',1066,29,13,'#ffdbb1','center');
+ text(`${Math.max(1,g.wave)} / ${Math.max(...g.schedule.map(s=>s.wave))}`,1066,59,26,'#fff2d4','center');
+ cutPanel(1149,10,122,90,'#302d4ceb','#d9a975');
+ text('Ⅱ',1210,42,29,'#ffe2b1','center');text('PAUSE  [P]',1210,79,12,'#f1ccb2','center');
+ // A narrow unobtrusive combat timeline beneath HUD.
+ roundPanel(246,114,1021,30,7,'#181b31ea','#82636c');
+ text('BATTLE',283,129,12,'#ddbfaa','center');
+ const bx=335,bw=809, progress=g.schedule.length?g.spawned/g.schedule.length:0;
+ roundPanel(bx,125,bw,8,4,'#3c3a4e','#51445c');
+ if(progress>0)roundPanel(bx+1,126,Math.max(2,(bw-2)*progress),6,3,'#7ce8c9');
+ const waves=Math.max(...g.schedule.map(x=>x.wave));
+ for(let w=1;w<=waves;w++){
+  const count=g.schedule.filter(s=>s.wave<=w).length;const mx=bx+bw*count/g.schedule.length;
+  ctx.fillStyle=w<=g.wave?'#ffde9d':'#715b72';ctx.strokeStyle='#392e4e';ctx.lineWidth=2;ctx.beginPath();ctx.arc(mx,129,6,0,Math.PI*2);ctx.fill();ctx.stroke();
+ }
+ text(`${g.spawned}/${g.schedule.length} threats`,1204,129,12,'#f1d5ba','center');
+}
+function drawDeck(t){
+ cutPanel(0,596,1280,124,'#18192ef6','#c58e5e');
+ const ability=['WINDLANCE','BOULDER','VINE SNARE','FIREBURST'];
+ for(let i=0;i<4;i++){
+  const d=spec(i),x=11+i*165,canUse=g.spark>=d.cost&&g.cool[i]===0,active=g.sel===i;
+  cutPanel(x,604,157,105,active?'#504358f8':'#292842f5',active?'#ffd474':'#706e85');
+  roundPanel(x+8,613,58,80,5,'#372e47bd',active?'#e7be76':'#6e6b7c');
+  drawImg(d.id,x+37,651,78,78);
+  roundPanel(x+12,612,18,20,3,'#231f37','#dfb870');text(String(i+1),x+21,621,14,'#fff3b9','center');
+  text(['GRYPHON','GOLEM','WARDEN','MAGE'][i],x+69,624,13,canUse?'#fff2cc':'#ac9a9f');
+  text(ability[i],x+70,643,10,canUse?'#92e9d2':'#8f9ca7');
+  manaCrystal(x+77,668,7);text(String(d.cost),x+98,668,17,canUse?'#ffdfac':'#9b8897');
+  text(g.cool[i]>0?`${Math.ceil(g.cool[i])}s COOLDOWN`:`RANK ${saved.upgrades[i]+1}`,x+70,690,11,canUse?'#c2f4dd':'#a4a1b7');
+  if(!canUse)rectangle(x+6,608,145,96,'#0c0e1830');
+ }
+ cutPanel(677,604,245,105,g.energy>=100?'#54405cf8':'#2b2948f5',g.energy>=100?'#ffce79':'#7c86aa');
+ manaCrystal(699,637,15);text('CRYSTAL BURST',802,634,18,'#ffe5ac','center');
+ text(g.energy>=100?'SPACE  ·  CAST NOW!':'SPACE  ·  BUILD CHARGE',802,673,13,g.energy>=100?'#ffe99c':'#bee2df','center');
+ text('Blast all enemies',797,695,11,'#d7bdcf','center');
+ cutPanel(929,604,338,105,'#292d49f4','#ba9773');
+ text(g.questionTimer<=0?'M  ·  BONUS MATH':'MATH RECHARGING',1097,629,17,'#ffe2aa','center');
+ text(g.questionTimer<=0?'+95 SPARK + ENERGY':`${Math.ceil(g.questionTimer)}s UNTIL READY`,1097,663,15,'#a0f4df','center');
+ text(g.world===3?`CLOCKWORK CHAIN ×${g.combo}  ·  CORRECT ${g.correct}`:g.world===4?`PRISM RENEWAL ${g.prismStreak}/3  ·  CORRECT ${g.correct}`:g.world===5?`NEXUS HARMONY ${[1,2,4,8].filter(bit=>g.nexusMask&bit).length}/4 · CORRECT ${g.correct}`:`MONSTERS ${g.kills}  ·  CORRECT ${g.correct}`,1097,690,12,'#f6d6c7','center');
+}
+
+function draw(now){
+ ctx.clearRect(0,0,W,H);ctx.imageSmoothingEnabled=false;
+ const world=g?.world||activeWorld;const bg=world===5?(mode==='menu'||mode==='pause'||mode==='result'?imgs.nexus_menu:imgs.nexus_battlefield):world===4?(mode==='menu'||mode==='pause'||mode==='result'?imgs.crystal_menu:imgs.crystal_battlefield):world===3?(mode==='menu'||mode==='pause'||mode==='result'?imgs.clockwork_menu:imgs.clockwork_battlefield):world===2?(mode==='menu'||mode==='pause'||mode==='result'?imgs.frostbite_menu:imgs.frostbite_battlefield):(mode==='menu'||mode==='pause'||mode==='result'?imgs.emberwood_menu:imgs.emberwood_battlefield);
+ if(bg?.naturalWidth)ctx.drawImage(bg,0,0,W,H);else rectangle(0,0,W,H,'#233b46');
+ const t=now*.001;
+ // Slow embers are confined to the illustrated valley, never placed over readable labels.
+ if(g&&mode!=='menu'){
+  for(let i=0;i<43;i++){
+   let x=((i*137+Math.sin(t*.3+i)*31+t*8*(i%3+1))%1280),y=148+((i*37-t*10*(1+i%2))%431+431)%431;
+   ctx.globalAlpha=.15+Math.abs(Math.sin(t+i*3))*.2;rectangle(x,y,g.world===2?3:2.3,g.world===2?3:2.3,g.world===2?(i%3?'#c7fcff':'#f8ffff'):g.world===3?(i%3?'#f4bbff':'#fff6a3'):g.world===4?(i%3?'#c1f8ff':'#d5adff'):g.world===5?(i%3?'#ffacf6':'#88d8ff'):(i%3?'#ffd070':'#fff3b2'));
+  }
+  ctx.globalAlpha=1;paintPortal(t);
+ }
+ if(g){
+  for(let r=0;r<5;r++){
+   if(!g.active.includes(r)){
+    ctx.fillStyle='#17132385';ctx.fillRect(242,LANES[r]-32,900,64);
+    text('SEALED',1110,LANES[r],14,'#d0bbc3','center');
+   }else{
+    ctx.globalAlpha=.075;
+    for(let col=0;col<COLS;col++){let x=X0+col*CELL;ctx.strokeStyle='#ffefce';ctx.lineWidth=1.2;ctx.strokeRect(x-43,LANES[r]-28,86,56)}
+    ctx.globalAlpha=1;
+    if(g.enemies.some(e=>e.lane===r&&e.x<300)&&g.active.includes(r)){
+     ctx.fillStyle='#ff564a22';ctx.fillRect(243,LANES[r]-29,95,58);
+    }
+   }
+   if(mode==='play'&&g.active.includes(r)&&hover?.row===r&&hover?.col>=0){
+    let x=X0+hover.col*CELL,occupied=g.placed.some(u=>u.row===r&&u.col===hover.col),afford=g.spark>=spec(g.sel).cost&&g.cool[g.sel]===0;
+    roundPanel(x-43,LANES[r]-29,86,58,8,occupied?'#ff64642c':afford?'#a9fff020':'#fff0a614',occupied?'#ff807f':afford?'#9cf7e6':'#ffbf8c');
+    if(!occupied&&afford){ctx.save();ctx.globalAlpha=.45;drawImg(DEF[g.sel].id,x,LANES[r]-18,82,82);ctx.restore()}
+   }
+  }
+  g.placed.slice().sort((a,b)=>a.y-b.y).forEach(u=>paintGuardian(u,t));
+  g.enemies.slice().sort((a,b)=>a.lane-b.lane).forEach(e=>paintEnemy(e,t));
+  for(const s of g.shots)paintProjectile(s,t);
+  for(let p of g.particles){ctx.globalAlpha=Math.min(1,p.life*1.6);ctx.shadowColor=p.color;ctx.shadowBlur=6;rectangle(p.x,p.y,p.size,p.size,p.color)}
+  ctx.globalAlpha=1;ctx.shadowBlur=0;
+  for(const f of g.floaters){ctx.globalAlpha=Math.min(1,f.life);text(f.label,f.x,f.y,17,f.color,'center');ctx.globalAlpha=1}
+  drawHUD(t);
+  drawDeck(t);
+  // Nonblocking overlays; all combat HUD elements remain clickable.
+  if(g.helpTimer>0&&mode==='play'){
+   ctx.globalAlpha=Math.min(.94,g.helpTimer/1.4);
+   roundPanel(370,150,550,39,9,'#152a3ce5','#b8dab0');
+   text('1–4 SELECT A GUARDIAN   •   CLICK A STONE TILE TO DEPLOY',645,170,17,'#f7eac2','center');
+   ctx.globalAlpha=1;
+  }
+  if(g.waveFlash>0&&mode==='play'){
+   ctx.globalAlpha=Math.min(.93,g.waveFlash/1.2);
+   ribbon(475,154,331,'WAVE '+g.wave+' / '+Math.max(...g.schedule.map(s=>s.wave)));
+   ctx.globalAlpha=1;
+  }
+  if(g.msgTime>0){
+   ctx.globalAlpha=Math.min(1,g.msgTime);
+   cutPanel(367,149,548,41,'#4c2e42ec','#f4b56e');
+   text(g.msg,641,169,17,'#fff1c7','center');ctx.globalAlpha=1;
+  }
+  if(g.level===10&&g.enemies.some(e=>BOSSES.includes(e.kind))){
+   ctx.globalAlpha=.95;roundPanel(431,557,410,30,7,'#4c2347e6','#ffb36c');
+   text(g.world===1?'BOSS · THE ASHEN TITAN':g.world===2?'BOSS · GLACIER COLOSSUS':g.world===3?'BOSS · CLOCKWORK TITAN':g.world===4?'BOSS · AMETHYST COLOSSUS':'BOSS · NEXUS OVERLORD',636,572,17,'#ffe9b4','center');ctx.globalAlpha=1;
+  }
+ }else{
+  cutPanel(0,0,W,87,'#19192ddc','#c18e63');
+  text('MATHBOUND',42,31,29,'#ffe6a6');text('SIEGE OF THE REALMS  ·  '+realmName(activeWorld).toUpperCase(),42,65,16,'#e1d0cc');
+ }
+}
+
+function loop(ms){const dt=lastTime?Math.min((ms-lastTime)/1000,.05):0;lastTime=ms;tick(dt);draw(ms);requestAnimationFrame(loop)}
+function position(e){let r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*1280/r.width,y:(e.clientY-r.top)*720/r.height}}
+canvas.addEventListener('pointermove',e=>{if(mode!=='play')return;const p=position(e),col=Math.round((p.x-X0)/CELL),row=LANES.findIndex(y=>Math.abs(y-p.y)<=36);hover={col:col>=0&&col<9?col:-1,row}});
+canvas.addEventListener('pointerleave',()=>hover=null);
+canvas.addEventListener('pointerdown',e=>{if(mode!=='play')return;const p=position(e);if(p.y<103){if(p.x>1180)pauseScreen();return}if(p.y>606){if(p.x<678){let i=Math.floor((p.x-13)/166);if(i>=0&&i<4){g.sel=i;sound(480,.055)}}else if(p.x>685&&p.x<911)launch();else if(p.x>913&&p.x<1270)quiz();return}let row=LANES.findIndex(y=>Math.abs(y-p.y)<=36),col=Math.round((p.x-X0)/CELL);if(row>=0)place(row,col)});
+window.addEventListener('keydown',e=>{if(e.target?.tagName==='INPUT'||e.target?.tagName==='SELECT')return;if(mode==='quiz')return;if(mode==='play'&&['1','2','3','4'].includes(e.key)){g.sel=Number(e.key)-1;sound(480,.05);return}if(mode==='play'&&(e.key==='m'||e.key==='M'))quiz();else if(mode==='play'&&e.code==='Space'){e.preventDefault();launch()}else if(e.key==='p'||e.key==='P'||e.key==='Escape'){if(mode==='play')pauseScreen();else if(mode==='pause')resume()}});
+requestAnimationFrame(loop);
+})();
+</script></body></html>
