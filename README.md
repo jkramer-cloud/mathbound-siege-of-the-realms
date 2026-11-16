@@ -1,4 +1,4 @@
-# Mathbound: Siege of the Realms — v0.7
+# Mathbound: Siege of the Realms — v0.7.1.1
 
 A browser-based fantasy math tower-defense game for the Naches Learning Hub. **This is a development/playtest build**, not yet a fully balanced classroom release.
 
@@ -20,7 +20,7 @@ The realms converge in one final battlefield. Enemies from Emberwood, Frostbite,
 
 ## Test offline — no repository required
 
-Extract the *complete game ZIP* and open `PLAY_OFFLINE.html` in Chrome or Edge. The offline file contains all art and runs without network requests. Do not open the repository `index.html` separately without its `assets` folder.
+Open `Mathbound_v071_PLAY_OFFLINE.html` in Chrome or Edge. The same self-contained file is also included in the full ZIP. The offline file contains all art and runs without network requests. Do not open the repository `index.html` separately without its `assets` folder.
 
 ## GitHub Pages
 
@@ -45,3 +45,19 @@ All world records share the original browser-local key `mathbound_emberwood_v01`
 - The available test environment blocked opening local files as navigation targets, so browser testing used direct HTML loading. Full 50-level manual playthroughs, tuning of wave balance, and classroom Chromebook playtests remain outstanding.
 - The Nexus Overlord inherits an earlier Colossus character sprite with a special prismatic aura; a fully original animated boss sprite is a future polish item.
 - This preview has no separate save export/import tool; clearing site data will remove progress.
+
+## v0.7.1: Spark clarity and Crystal Burst visual fix
+
+- **No additional guardians.** Leaf Warden remains the Spark producer: costs 95 Spark, first harvest after approximately 4 seconds, then +30 Spark every 11 seconds (higher at permanent upgrade ranks). A bright `+30 SPARK` text effect, collection flare, and small animated crystals flying to the Spark display make it easier to notice.
+- Crystal Burst now emits a luminous left-to-right shockwave. Damage is applied as the wave reaches each enemy; enemies are removed by the normal defeat and reward flow, rather than vanishing immediately when Space is pressed.
+- Closed lanes remain unavailable at the original campaign levels but now use lighter boundaries and labels instead of broad dark overlays that obscured the battlefield art.
+- No changes to enemy schedules, placement rules, math challenge scoring, guardian costs, permanent upgrades, or the original save key. The victory screen waits until a launched Crystal Burst has finished sweeping the field.
+- Tested using a headless browser for rendering and the basic Warden/Crystal Burst interactions; full 50-level classroom balancing remains a playtest item.
+
+## v0.7.1: Spark clarity and Crystal Burst visual fix
+
+- **No additional guardians.** Leaf Warden remains the Spark producer: costs 95 Spark, first harvest after approximately 4 seconds, then +30 Spark every 11 seconds (higher at permanent upgrade ranks). A bright `+30 SPARK` text effect, collection flare, and small animated crystals flying to the Spark display make it easier to notice.
+- Crystal Burst now emits a luminous left-to-right shockwave. Damage is applied as the wave reaches each enemy; enemies are removed by the normal defeat and reward flow, rather than vanishing immediately when Space is pressed.
+- Closed lanes remain unavailable at the original campaign levels but now use lighter boundaries and labels instead of broad dark overlays that obscured the battlefield art.
+- No changes to enemy schedules, placement rules, math challenge scoring, guardian costs, permanent upgrades, or the original save key.
+- Tested using a headless browser for rendering and the basic Warden/Crystal Burst interactions; full 50-level classroom balancing remains a playtest item.
